@@ -24,10 +24,11 @@
         <TextBlock Height="26" Width="40" FontSize="22" TextAlignment="Center" FontFamily="{StaticResource LCD}"
                  Background="Black" Foreground="Red" HorizontalAlignment="Right" Text="000"/>
       </Grid>
-      
+
     </Grid>
     <ListBox Grid.Row="1" MouseLeave="listBox_MouseLeave" Margin="8" Padding="0" x:Name="listBox" ItemsSource="{Binding items}"
-             ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled">
+             ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled"
+             SelectionChanged="listBox_SelectionChanged">
       <ListBox.Template>
         <ControlTemplate>
           <Grid>
@@ -60,21 +61,15 @@
                   <Rectangle x:Name="topThickness" Fill="#ffffff" Height="2" VerticalAlignment="Top" HorizontalAlignment="stretch"/>
                   <Rectangle x:Name="rightThickness" Fill="#808080" Width="2" VerticalAlignment="stretch" HorizontalAlignment="Right"/>
                   <Rectangle x:Name="buttomThickness" Fill="#808080" Height="2" VerticalAlignment="Bottom" HorizontalAlignment="stretch"/>
-
                 </Grid>
 
-
                 <ControlTemplate.Triggers>
-                  <MultiTrigger>
-                    <MultiTrigger.Conditions>
-                      <Condition Property="Selector.IsSelectionActive" Value="True"/>
-                      <Condition Property="IsSelected" Value="True"/>
-                    </MultiTrigger.Conditions>
+                  <DataTrigger Binding="{Binding Pressed}" Value="True">
                     <Setter Property="Fill" TargetName="leftThickness" Value="Transparent"/>
                     <Setter Property="Fill" TargetName="topThickness" Value="Transparent"/>
                     <Setter Property="Fill" TargetName="rightThickness" Value="Transparent"/>
                     <Setter Property="Fill" TargetName="buttomThickness" Value="Transparent"/>
-                  </MultiTrigger>
+                  </DataTrigger>
                 </ControlTemplate.Triggers>
               </ControlTemplate>
             </Setter.Value>
