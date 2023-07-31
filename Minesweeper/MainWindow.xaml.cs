@@ -27,16 +27,16 @@ namespace Minesweeper
     int column = 30;
     int maxLattice = 480;
     bool leftRightBtnPressed = false;
-    List<int> offsetList = new List<int>();
-    List<Lattice> lastPressList = new List<Lattice>();
-    public ObservableCollection<Lattice> items { get; set; }
+    readonly List<int> offsetList = new List<int>(9);
+    readonly List<Lattice> lastPressList = new List<Lattice>();
+    public ObservableCollection<Lattice> LatticeList { get; set; }
       = new ObservableCollection<Lattice>(new List<Lattice>(480));
     public MainWindow()
     {
       InitializeComponent();
       for (int i = 0; i < maxLattice; i++)
       {
-        items.Add(new Lattice());
+        LatticeList.Add(new Lattice());
       }
       ReCalculateOffset();
       DataContext = this;
@@ -44,7 +44,6 @@ namespace Minesweeper
     private void ReCalculateOffset()
     {
       offsetList.Clear();
-      offsetList.Capacity = 9;
       ///九宫格的偏移位置
       offsetList.Add(-column - 1);
       offsetList.Add(-column);
@@ -103,16 +102,19 @@ namespace Minesweeper
 
     private List<Lattice> GetAroundLattice(Lattice lattice)
     {
-      int index = items.IndexOf(lattice);
+      int index = LatticeList.IndexOf(lattice);
       int inRow = index / row;
       int inColumn = index % column;
       var result = new List<Lattice>();
-      foreach (var item in offsetList)
+
+      for (int i = 0; i < offsetList.Count; i++)
       {
-        int offset = index + item;
-        if (offset >= 0 && offset < maxLattice)
+        int offset = index + offsetList[i];
+        int offsetRow = i / 3;
+        if (offset >= 0 && offset < maxLattice &&
+          offset / column == (int)Math.Floor(((float)offsetList[offsetRow * 3 + 1] + index) / (float)column))//格子位置在最小、最大值范围内，并且九宫格有三行，该偏移量的位置和该行中间的偏移量对列数的商相等，说明没有换行
         {
-          result.Add(items[offset]);
+          result.Add(LatticeList[offset]);
         }
       }
       return result;
