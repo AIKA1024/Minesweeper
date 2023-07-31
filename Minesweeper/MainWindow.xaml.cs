@@ -28,15 +28,15 @@ namespace Minesweeper
     int maxLattice = 480;
     bool leftRightBtnPressed = false;
     readonly List<int> offsetList = new List<int>(9);
-    readonly List<Lattice> lastPressList = new List<Lattice>();
-    public ObservableCollection<Lattice> LatticeList { get; set; }
-      = new ObservableCollection<Lattice>(new List<Lattice>(480));
+    readonly List<Cell> lastPressList = new List<Cell>();
+    public ObservableCollection<Cell> CellList { get; set; }
+      = new ObservableCollection<Cell>(new List<Cell>(480));
     public MainWindow()
     {
       InitializeComponent();
       for (int i = 0; i < maxLattice; i++)
       {
-        LatticeList.Add(new Lattice());
+        CellList.Add(new Cell());
       }
       ReCalculateOffset();
       DataContext = this;
@@ -60,7 +60,7 @@ namespace Minesweeper
 
     private void UpdatePressLattice()
     {
-      foreach (Lattice lattice in lastPressList)
+      foreach (Cell lattice in lastPressList)
         lattice.Pressed = false;
       lastPressList.Clear();
 
@@ -69,7 +69,7 @@ namespace Minesweeper
 
       if (leftRightBtnPressed)
       {
-        foreach (var lattice in GetAroundLattice((Lattice)listBox.SelectedItem))
+        foreach (var lattice in GetAroundLattice((Cell)listBox.SelectedItem))
         {
           lattice.Pressed = true;
           lastPressList.Add(lattice);
@@ -77,8 +77,8 @@ namespace Minesweeper
       }
       else
       {
-        ((Lattice)listBox.SelectedItem).Pressed = true;
-        lastPressList.Add((Lattice)listBox.SelectedItem);
+        ((Cell)listBox.SelectedItem).Pressed = true;
+        lastPressList.Add((Cell)listBox.SelectedItem);
       }
     }
     private void ListBoxItem_MouseButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -100,12 +100,12 @@ namespace Minesweeper
       listBox.UnselectAll();
     }
 
-    private List<Lattice> GetAroundLattice(Lattice lattice)
+    private List<Cell> GetAroundLattice(Cell lattice)
     {
-      int index = LatticeList.IndexOf(lattice);
+      int index = CellList.IndexOf(lattice);
       int inRow = index / row;
       int inColumn = index % column;
-      var result = new List<Lattice>();
+      var result = new List<Cell>();
 
       for (int i = 0; i < offsetList.Count; i++)
       {
@@ -114,7 +114,7 @@ namespace Minesweeper
         if (offset >= 0 && offset < maxLattice &&
           offset / column == (int)Math.Floor(((float)offsetList[offsetRow * 3 + 1] + index) / (float)column))//格子位置在最小、最大值范围内，并且九宫格有三行，该偏移量的位置和该行中间的偏移量对列数的商相等，说明没有换行
         {
-          result.Add(LatticeList[offset]);
+          result.Add(CellList[offset]);
         }
       }
       return result;
@@ -129,7 +129,7 @@ namespace Minesweeper
     {
       foreach (var item in e.RemovedItems)
       {
-        ((Lattice)item).Pressed = false;
+        ((Cell)item).Pressed = false;
       }
       UpdatePressLattice();
     }

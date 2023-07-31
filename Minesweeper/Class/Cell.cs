@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Minesweeper.Class
 {
-  public class Lattice : INotifyPropertyChanged
+  public class Cell : INotifyPropertyChanged
   {
     public event PropertyChangedEventHandler? PropertyChanged;
 

@@ -26,7 +26,7 @@
       </Grid>
 
     </Grid>
-    <ListBox Grid.Row="1" MouseLeave="listBox_MouseLeave" Margin="8" Padding="0" x:Name="listBox" ItemsSource="{Binding LatticeList}"
+    <ListBox Grid.Row="1" MouseLeave="listBox_MouseLeave" Margin="8" Padding="0" x:Name="listBox" ItemsSource="{Binding CellList}"
              ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled"
              SelectionChanged="listBox_SelectionChanged">
       <ListBox.Template>
