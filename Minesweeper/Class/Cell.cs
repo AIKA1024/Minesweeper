@@ -23,5 +23,9 @@ namespace Minesweeper.Class
 	  }
 	}
 
+	public override string ToString()
+	{
+	  return "";
+	}
   }
 }
