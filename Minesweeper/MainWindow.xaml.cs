@@ -28,7 +28,7 @@ namespace Minesweeper
     int maxLattice = 480;
     bool leftRightBtnPressed = false;
     readonly List<int> offsetList = new List<int>(9);
-    readonly List<Cell> lastPressList = new List<Cell>();
+    readonly List<Cell?> lastPressList = new List<Cell?>();
     public ObservableCollection<Cell> CellList { get; set; }
       = new ObservableCollection<Cell>(new List<Cell>(480));
     public MainWindow()
@@ -60,8 +60,13 @@ namespace Minesweeper
 
     private void UpdatePressLattice()
     {
-      foreach (Cell lattice in lastPressList)
+      foreach (Cell? lattice in lastPressList)
+      {
+        if (lattice == null)
+          continue;
         lattice.Pressed = false;
+        lattice.Flag = CellFlag.None;
+      }
       lastPressList.Clear();
 
       if (listBox.SelectedItem == null)
@@ -69,15 +74,30 @@ namespace Minesweeper
 
       if (leftRightBtnPressed)
       {
-        foreach (var lattice in GetAroundLattice((Cell)listBox.SelectedItem))
-        {
-          lattice.Pressed = true;
-          lastPressList.Add(lattice);
-        }
+        List<Cell?> aroundCell = GetAroundCell((Cell)listBox.SelectedItem);
+          for (int i = 0; i < aroundCell.Count; i++)
+          {
+            if (aroundCell[i] == null)
+              continue;
+
+            if (i % 3 == 0)//判断是不是在边上，左上右下
+              aroundCell[i].Flag = CellFlag.Left;
+            if (i / 3 == 0)
+              aroundCell[i].Flag |= CellFlag.Top;
+            if (i % 3 == 2)
+              aroundCell[i].Flag |= CellFlag.Right;
+            if (i > 5)
+              aroundCell[i].Flag |= CellFlag.Bottom;
+
+            aroundCell[i].Pressed = true;
+            lastPressList.Add(aroundCell[i]);
+          }
       }
       else
       {
-        ((Cell)listBox.SelectedItem).Pressed = true;
+        Cell cell = (Cell)listBox.SelectedItem;
+        cell.Flag = CellFlag.Left | CellFlag.Right | CellFlag.Top | CellFlag.Bottom;
+        cell.Pressed = true;
         lastPressList.Add((Cell)listBox.SelectedItem);
       }
     }
@@ -100,12 +120,12 @@ namespace Minesweeper
       listBox.UnselectAll();
     }
 
-    private List<Cell> GetAroundLattice(Cell lattice)
+    private List<Cell?> GetAroundCell(Cell lattice)
     {
       int index = CellList.IndexOf(lattice);
       int inRow = index / row;
       int inColumn = index % column;
-      var result = new List<Cell>();
+      var result = new List<Cell?>();
 
       for (int i = 0; i < offsetList.Count; i++)
       {
@@ -115,6 +135,10 @@ namespace Minesweeper
           offset / column == (int)Math.Floor(((float)offsetList[offsetRow * 3 + 1] + index) / (float)column))//格子位置在最小、最大值范围内，并且九宫格有三行，该偏移量的位置和该行中间的偏移量对列数的商相等，说明没有换行
         {
           result.Add(CellList[offset]);
+        }
+        else
+        {
+          result.Add(null);
         }
       }
       return result;

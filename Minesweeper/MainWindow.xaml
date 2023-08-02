@@ -3,6 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:class="clr-namespace:Minesweeper.Class"
+        xmlns:converter="clr-namespace:Minesweeper.Resources.Converters"
         xmlns:local="clr-namespace:Minesweeper"
         mc:Ignorable="d"
         Title="扫雷" Height="464" Width="678" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize">
@@ -69,6 +71,26 @@
                     <Setter Property="Fill" TargetName="topThickness" Value="Transparent"/>
                     <Setter Property="Fill" TargetName="rightThickness" Value="#808080"/>
                     <Setter Property="Fill" TargetName="buttomThickness" Value="#808080"/>
+                    <Setter Property="Width" TargetName="rightThickness" Value="1"/>
+                    <Setter Property="Height" TargetName="buttomThickness" Value="1"/>
+
+                  </DataTrigger>
+
+                  <DataTrigger Binding="{Binding Flag,Converter={x:Static converter:EnumFlagConverter.Instance},ConverterParameter={x:Static class:CellFlag.Left}}"
+                               Value="True">
+                    <Setter Property="Fill" TargetName="leftThickness" Value="#808080"/>
+                  </DataTrigger>
+                  <DataTrigger Binding="{Binding Flag,Converter={x:Static converter:EnumFlagConverter.Instance},ConverterParameter={x:Static class:CellFlag.Top}}"
+                               Value="True">
+                    <Setter Property="Fill" TargetName="topThickness" Value="#808080"/>
+                  </DataTrigger>
+                  <DataTrigger Binding="{Binding Flag,Converter={x:Static converter:EnumFlagConverter.Instance},ConverterParameter={x:Static class:CellFlag.Right}}"
+                               Value="True">
+                    <Setter Property="Fill" TargetName="rightThickness" Value="Transparent"/>
+                  </DataTrigger>
+                  <DataTrigger Binding="{Binding Flag,Converter={x:Static converter:EnumFlagConverter.Instance},ConverterParameter={x:Static class:CellFlag.Bottom}}"
+                               Value="True">
+                    <Setter Property="Fill" TargetName="buttomThickness" Value="Transparent"/>
                   </DataTrigger>
                 </ControlTemplate.Triggers>
               </ControlTemplate>
