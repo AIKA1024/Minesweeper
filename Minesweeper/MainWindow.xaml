@@ -102,6 +102,26 @@
                                Value="True">
                       <Setter Property="Fill" TargetName="buttomThickness" Value="Transparent"/>
                     </DataTrigger>
+
+                    <DataTrigger Binding="{Binding IsBomb}" Value="True">
+                      <Setter Property="ContentTemplate">
+                        <Setter.Value>
+                          <DataTemplate>
+                            <Image Source="./Resources/Bomb.png"/>
+                          </DataTemplate>
+                        </Setter.Value>
+                      </Setter>
+                    </DataTrigger>
+
+                    <DataTrigger Binding="{Binding IsBomb}" Value="False">
+                      <Setter Property="ContentTemplate">
+                        <Setter.Value>
+                          <DataTemplate>
+                            <TextBlock Text="{Binding AroundBombNum}" FontWeight="Black" TextAlignment="Center"/>
+                          </DataTemplate>
+                        </Setter.Value>
+                      </Setter>
+                    </DataTrigger>
                   </ControlTemplate.Triggers>
                 </ControlTemplate>
               </Setter.Value>

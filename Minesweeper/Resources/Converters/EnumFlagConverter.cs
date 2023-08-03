@@ -16,14 +16,7 @@ namespace Minesweeper.Resources.Converters
     {
       CellFlag source = (CellFlag)value;
       CellFlag targetEnum = (CellFlag)parameter;
-      if (targetEnum == (targetEnum & source))
-      {
-        return true;
-      }
-      else
-      {
-        return false;
-      }
+      return targetEnum == (targetEnum & source);
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

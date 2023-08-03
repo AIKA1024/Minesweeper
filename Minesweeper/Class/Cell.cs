@@ -15,6 +15,38 @@ namespace Minesweeper.Class
   public class Cell : INotifyPropertyChanged
   {
     public event PropertyChangedEventHandler? PropertyChanged;
+    public Cell(int index)
+    {
+      Index = index;
+    }
+    public int Index { get; set; }
+    private int aroundBombNum;
+    public int AroundBombNum 
+    {
+      get { return aroundBombNum; }
+      set
+      {
+        if (aroundBombNum != value)
+        {
+          aroundBombNum = value;
+          PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AroundBombNum)));
+        }
+      }
+    }
+
+    private bool isBomb;
+    public bool IsBomb 
+    {
+      get { return isBomb; }
+      set
+      {
+        if (isBomb!=value) 
+        {
+          isBomb = value;
+          PropertyChanged?.Invoke(this,new PropertyChangedEventArgs(nameof(IsBomb)));
+        }
+      }
+    }
 
     private bool pressed;
     public bool Pressed

@@ -8,11 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\Bomb.png" />
     <None Remove="Resources\LCD.ttf" />
     <None Remove="Resources\电子数字.ttf" />
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Resources\Bomb.png" />
     <Resource Include="Resources\电子数字.ttf" />
   </ItemGroup>
 

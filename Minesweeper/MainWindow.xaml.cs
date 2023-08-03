@@ -25,7 +25,9 @@ namespace Minesweeper
   {
     int row = 16;
     int column = 30;
-    int maxLattice = 480;
+    int bombCount = 40;
+    int maxCell = 480;
+    bool started = false;
     bool leftRightBtnPressed = false;
     readonly List<int> offsetList = new List<int>(9);
     readonly List<Cell?> lastPressList = new List<Cell?>();
@@ -34,12 +36,37 @@ namespace Minesweeper
     public MainWindow()
     {
       InitializeComponent();
-      for (int i = 0; i < maxLattice; i++)
+      for (int i = 0; i < maxCell; i++)
       {
-        CellList.Add(new Cell());
+        CellList.Add(CellPool.GetCell(i));
       }
       ReCalculateOffset();
       DataContext = this;
+    }
+
+    private void InitGame()
+    {
+      Cell SeleCell = (Cell)listBox.SelectedItem;
+      //布雷
+      for (int i = 0; i < bombCount; i++)
+      {
+        int bombIndex = Random.Shared.Next(0, maxCell);
+        while (bombIndex == SeleCell.Index || CellList[bombIndex].IsBomb == true)
+          bombIndex = Random.Shared.Next(0, maxCell);
+
+        CellList[bombIndex].IsBomb = true;
+      }
+      //计算周围雷数
+      foreach (var cell in CellList)
+      {
+        if (cell.IsBomb)
+          continue;
+
+        foreach (var item in GetAroundCell(cell))
+          if (item?.IsBomb == true)
+            cell.AroundBombNum++;
+      }
+
     }
     private void ReCalculateOffset()
     {
@@ -103,8 +130,13 @@ namespace Minesweeper
     }
     private void ListBoxItem_MouseButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
     {
+      if (!started && !leftRightBtnPressed && listBox.SelectedItem != null)
+      {
+        started = true;
+        InitGame();
+      }
       leftRightBtnPressed = false;
-      listBox.UnselectAll();
+      listBox.SelectedItem = null;
       UpdatePressLattice();
     }
     private void ListBoxItem_MouseDown(object sender, MouseButtonEventArgs e)
@@ -117,7 +149,7 @@ namespace Minesweeper
     }
     private void listBox_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
     {
-      listBox.UnselectAll();
+      listBox.SelectedItem = null;
     }
 
     private List<Cell?> GetAroundCell(Cell lattice)
@@ -131,7 +163,7 @@ namespace Minesweeper
       {
         int offset = index + offsetList[i];
         int offsetRow = i / 3;
-        if (offset >= 0 && offset < maxLattice &&
+        if (offset >= 0 && offset < maxCell &&
           offset / column == (int)Math.Floor(((float)offsetList[offsetRow * 3 + 1] + index) / (float)column))//格子位置在最小、最大值范围内，并且九宫格有三行，该偏移量的位置和该行中间的偏移量对列数的商相等，说明没有换行
         {
           result.Add(CellList[offset]);
