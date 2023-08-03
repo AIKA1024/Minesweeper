@@ -75,23 +75,23 @@ namespace Minesweeper
       if (leftRightBtnPressed)
       {
         List<Cell?> aroundCell = GetAroundCell((Cell)listBox.SelectedItem);
-          for (int i = 0; i < aroundCell.Count; i++)
-          {
-            if (aroundCell[i] == null)
-              continue;
+        for (int i = 0; i < aroundCell.Count; i++)
+        {
+          if (aroundCell[i] == null)
+            continue;
 
-            if (i % 3 == 0)//判断是不是在边上，左上右下
-              aroundCell[i].Flag = CellFlag.Left;
-            if (i / 3 == 0)
-              aroundCell[i].Flag |= CellFlag.Top;
-            if (i % 3 == 2)
-              aroundCell[i].Flag |= CellFlag.Right;
-            if (i > 5)
-              aroundCell[i].Flag |= CellFlag.Bottom;
+          if (i % 3 == 0)//判断是不是在边上，左上右下
+            aroundCell[i].Flag = CellFlag.Left;
+          if (i / 3 == 0)
+            aroundCell[i].Flag |= CellFlag.Top;
+          if (i % 3 == 2)
+            aroundCell[i].Flag |= CellFlag.Right;
+          if (i > 5)
+            aroundCell[i].Flag |= CellFlag.Bottom;
 
-            aroundCell[i].Pressed = true;
-            lastPressList.Add(aroundCell[i]);
-          }
+          aroundCell[i].Pressed = true;
+          lastPressList.Add(aroundCell[i]);
+        }
       }
       else
       {

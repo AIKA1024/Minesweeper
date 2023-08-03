@@ -8,96 +8,108 @@
         xmlns:local="clr-namespace:Minesweeper"
         mc:Ignorable="d"
         Title="扫雷" Height="464" Width="678" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize">
-  <Grid Margin="3 3 0 0" Background="#c0c0c0">
+  <Grid>
     <Grid.RowDefinitions>
-      <RowDefinition Height="60"/>
+      <RowDefinition Height="auto"/>
       <RowDefinition/>
     </Grid.RowDefinitions>
-    <Grid Background="#c0c0c0" Margin="8" Grid.Row="0">
-      <Rectangle x:Name="leftThickness" Fill="#808080" Width="2" VerticalAlignment="stretch" HorizontalAlignment="Left"/>
-      <Rectangle x:Name="topThickness" Fill="#808080" Height="2" VerticalAlignment="Top" HorizontalAlignment="stretch"/>
-      <Rectangle x:Name="rightThickness" Fill="#ffffff" Width="2" VerticalAlignment="stretch" HorizontalAlignment="Right"/>
-      <Rectangle x:Name="buttomThickness" Fill="#ffffff" Height="2" VerticalAlignment="Bottom" HorizontalAlignment="stretch"/>
+    <Menu FontSize="14" Background="White" BorderThickness="0 0 0 1.5" BorderBrush="#f0f0f0">
+      <MenuItem Header="菜单"/>
+      <MenuItem Header="帮助"/>
+    </Menu>
 
-      <Grid Margin="8">
-        <TextBlock Height="26" Width="40" FontSize="22" TextAlignment="Center" FontFamily="{StaticResource LCD}"
+    <Grid Grid.Row="1" Margin="3 3 0 0" Background="#c0c0c0">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="60"/>
+        <RowDefinition/>
+      </Grid.RowDefinitions>
+      <Grid Background="#c0c0c0" Margin="8" Grid.Row="0">
+        <Rectangle x:Name="leftThickness" Fill="#808080" Width="2" VerticalAlignment="stretch" HorizontalAlignment="Left"/>
+        <Rectangle x:Name="topThickness" Fill="#808080" Height="2" VerticalAlignment="Top" HorizontalAlignment="stretch"/>
+        <Rectangle x:Name="rightThickness" Fill="#ffffff" Width="2" VerticalAlignment="stretch" HorizontalAlignment="Right"/>
+        <Rectangle x:Name="buttomThickness" Fill="#ffffff" Height="2" VerticalAlignment="Bottom" HorizontalAlignment="stretch"/>
+
+        <Grid Margin="8">
+          <TextBlock Height="26" Width="40" FontSize="22" TextAlignment="Center" FontFamily="{StaticResource LCD}"
                  Background="Black" Foreground="Red" HorizontalAlignment="Left" Text="000"/>
-        <Button HorizontalAlignment="Center" Width="40" MouseMove="Button_MouseMove"/>
-        <TextBlock Height="26" Width="40" FontSize="22" TextAlignment="Center" FontFamily="{StaticResource LCD}"
+          <Button HorizontalAlignment="Center" Width="40" MouseMove="Button_MouseMove"/>
+          <TextBlock Height="26" Width="40" FontSize="22" TextAlignment="Center" FontFamily="{StaticResource LCD}"
                  Background="Black" Foreground="Red" HorizontalAlignment="Right" Text="000"/>
-      </Grid>
+        </Grid>
 
-    </Grid>
-    <ListBox Grid.Row="1" MouseLeave="listBox_MouseLeave" Margin="8" Padding="0" x:Name="listBox" ItemsSource="{Binding CellList}"
+      </Grid>
+      <ListBox Grid.Row="1" MouseLeave="listBox_MouseLeave" Margin="8" Padding="0" x:Name="listBox" ItemsSource="{Binding CellList}"
              ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled"
              SelectionChanged="listBox_SelectionChanged">
-      <ListBox.Template>
-        <ControlTemplate>
-          <Grid>
-            <ItemsPresenter Margin="3"/>
-            <Rectangle x:Name="leftThickness" Fill="#808080" Width="3" VerticalAlignment="stretch" HorizontalAlignment="Left"/>
-            <Rectangle x:Name="topThickness" Fill="#808080" Height="3" VerticalAlignment="Top" HorizontalAlignment="stretch"/>
-            <Rectangle x:Name="rightThickness" Fill="#ffffff" Width="3" VerticalAlignment="stretch" HorizontalAlignment="Right"/>
-            <Rectangle x:Name="buttomThickness" Fill="#ffffff" Height="3" VerticalAlignment="Bottom" HorizontalAlignment="stretch"/>
-          </Grid>
-        </ControlTemplate>
-      </ListBox.Template>
-      <ListBox.ItemsPanel>
-        <ItemsPanelTemplate>
-          <WrapPanel Width="{Binding ActualWidth,RelativeSource={RelativeSource AncestorType=ListBox,AncestorLevel=1}}"/>
-        </ItemsPanelTemplate>
-      </ListBox.ItemsPanel>
-      <ListBox.ItemContainerStyle>
-        <Style TargetType="ListBoxItem">
-          <Setter Property="Width" Value="{Binding ActualHeight,RelativeSource={RelativeSource Mode=Self}}"/>
-          <Setter Property="Template">
-            <Setter.Value>
-              <ControlTemplate TargetType="ListBoxItem">
-                <Grid MouseUp="ListBoxItem_MouseButtonUp"
+        <ListBox.Template>
+          <ControlTemplate>
+            <Grid>
+              <ItemsPresenter Margin="3"/>
+              <Rectangle x:Name="leftThickness" Fill="#808080" Width="3" VerticalAlignment="stretch" HorizontalAlignment="Left"/>
+              <Rectangle x:Name="topThickness" Fill="#808080" Height="3" VerticalAlignment="Top" HorizontalAlignment="stretch"/>
+              <Rectangle x:Name="rightThickness" Fill="#ffffff" Width="3" VerticalAlignment="stretch" HorizontalAlignment="Right"/>
+              <Rectangle x:Name="buttomThickness" Fill="#ffffff" Height="3" VerticalAlignment="Bottom" HorizontalAlignment="stretch"/>
+            </Grid>
+          </ControlTemplate>
+        </ListBox.Template>
+        <ListBox.ItemsPanel>
+          <ItemsPanelTemplate>
+            <WrapPanel Width="{Binding ActualWidth,RelativeSource={RelativeSource AncestorType=ListBox,AncestorLevel=1}}"/>
+          </ItemsPanelTemplate>
+        </ListBox.ItemsPanel>
+        <ListBox.ItemContainerStyle>
+          <Style TargetType="ListBoxItem">
+            <Setter Property="Width" Value="{Binding ActualHeight,RelativeSource={RelativeSource Mode=Self}}"/>
+            <Setter Property="Template">
+              <Setter.Value>
+                <ControlTemplate TargetType="ListBoxItem">
+                  <Grid MouseUp="ListBoxItem_MouseButtonUp"
                       MouseDown="ListBoxItem_MouseDown">
-                  <Border Padding="3" x:Name="Bd"  Background="#c0c0c0">
-                    <ContentPresenter/>
-                  </Border>
+                    <Border Padding="3" x:Name="Bd"  Background="#c0c0c0">
+                      <ContentPresenter/>
+                    </Border>
 
-                  <Rectangle x:Name="leftThickness" Fill="#ffffff" Width="2" VerticalAlignment="stretch" HorizontalAlignment="Left"/>
-                  <Rectangle x:Name="topThickness" Fill="#ffffff" Height="2" VerticalAlignment="Top" HorizontalAlignment="stretch"/>
-                  <Rectangle x:Name="rightThickness" Fill="#808080" Width="2" VerticalAlignment="stretch" HorizontalAlignment="Right"/>
-                  <Rectangle x:Name="buttomThickness" Fill="#808080" Height="2" VerticalAlignment="Bottom" HorizontalAlignment="stretch"/>
-                </Grid>
+                    <Rectangle x:Name="leftThickness" Fill="#ffffff" Width="2" VerticalAlignment="stretch" HorizontalAlignment="Left"/>
+                    <Rectangle x:Name="topThickness" Fill="#ffffff" Height="2" VerticalAlignment="Top" HorizontalAlignment="stretch"/>
+                    <Rectangle x:Name="rightThickness" Fill="#808080" Width="2" VerticalAlignment="stretch" HorizontalAlignment="Right"/>
+                    <Rectangle x:Name="buttomThickness" Fill="#808080" Height="2" VerticalAlignment="Bottom" HorizontalAlignment="stretch"/>
+                  </Grid>
 
-                <ControlTemplate.Triggers>
-                  <DataTrigger Binding="{Binding Pressed}" Value="True">
-                    <Setter Property="Fill" TargetName="leftThickness" Value="Transparent"/>
-                    <Setter Property="Fill" TargetName="topThickness" Value="Transparent"/>
-                    <Setter Property="Fill" TargetName="rightThickness" Value="#808080"/>
-                    <Setter Property="Fill" TargetName="buttomThickness" Value="#808080"/>
-                    <Setter Property="Width" TargetName="rightThickness" Value="1"/>
-                    <Setter Property="Height" TargetName="buttomThickness" Value="1"/>
+                  <ControlTemplate.Triggers>
+                    <DataTrigger Binding="{Binding Pressed}" Value="True">
+                      <Setter Property="Fill" TargetName="leftThickness" Value="Transparent"/>
+                      <Setter Property="Fill" TargetName="topThickness" Value="Transparent"/>
+                      <Setter Property="Fill" TargetName="rightThickness" Value="#808080"/>
+                      <Setter Property="Fill" TargetName="buttomThickness" Value="#808080"/>
+                      <Setter Property="Width" TargetName="rightThickness" Value="1"/>
+                      <Setter Property="Height" TargetName="buttomThickness" Value="1"/>
 
-                  </DataTrigger>
+                    </DataTrigger>
 
-                  <DataTrigger Binding="{Binding Flag,Converter={x:Static converter:EnumFlagConverter.Instance},ConverterParameter={x:Static class:CellFlag.Left}}"
+                    <DataTrigger Binding="{Binding Flag,Converter={x:Static converter:EnumFlagConverter.Instance},ConverterParameter={x:Static class:CellFlag.Left}}"
                                Value="True">
-                    <Setter Property="Fill" TargetName="leftThickness" Value="#808080"/>
-                  </DataTrigger>
-                  <DataTrigger Binding="{Binding Flag,Converter={x:Static converter:EnumFlagConverter.Instance},ConverterParameter={x:Static class:CellFlag.Top}}"
+                      <Setter Property="Fill" TargetName="leftThickness" Value="#808080"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Flag,Converter={x:Static converter:EnumFlagConverter.Instance},ConverterParameter={x:Static class:CellFlag.Top}}"
                                Value="True">
-                    <Setter Property="Fill" TargetName="topThickness" Value="#808080"/>
-                  </DataTrigger>
-                  <DataTrigger Binding="{Binding Flag,Converter={x:Static converter:EnumFlagConverter.Instance},ConverterParameter={x:Static class:CellFlag.Right}}"
+                      <Setter Property="Fill" TargetName="topThickness" Value="#808080"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Flag,Converter={x:Static converter:EnumFlagConverter.Instance},ConverterParameter={x:Static class:CellFlag.Right}}"
                                Value="True">
-                    <Setter Property="Fill" TargetName="rightThickness" Value="Transparent"/>
-                  </DataTrigger>
-                  <DataTrigger Binding="{Binding Flag,Converter={x:Static converter:EnumFlagConverter.Instance},ConverterParameter={x:Static class:CellFlag.Bottom}}"
+                      <Setter Property="Fill" TargetName="rightThickness" Value="Transparent"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Flag,Converter={x:Static converter:EnumFlagConverter.Instance},ConverterParameter={x:Static class:CellFlag.Bottom}}"
                                Value="True">
-                    <Setter Property="Fill" TargetName="buttomThickness" Value="Transparent"/>
-                  </DataTrigger>
-                </ControlTemplate.Triggers>
-              </ControlTemplate>
-            </Setter.Value>
-          </Setter>
-        </Style>
-      </ListBox.ItemContainerStyle>
-    </ListBox>
+                      <Setter Property="Fill" TargetName="buttomThickness" Value="Transparent"/>
+                    </DataTrigger>
+                  </ControlTemplate.Triggers>
+                </ControlTemplate>
+              </Setter.Value>
+            </Setter>
+          </Style>
+        </ListBox.ItemContainerStyle>
+      </ListBox>
+    </Grid>
   </Grid>
+  
 </Window>

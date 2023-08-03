@@ -22,8 +22,11 @@ namespace Minesweeper.Class
       get { return pressed; }
       set
       {
-        pressed = value;
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Pressed)));
+        if (pressed != value)
+        {
+          pressed = value;
+          PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Pressed)));
+        }
       }
     }
     private CellFlag flag;
@@ -35,8 +38,11 @@ namespace Minesweeper.Class
       get { return flag; }
       set
       {
-        flag = value;
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Flag)));
+        if (flag != value)
+        {
+          flag = value;
+          PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Flag)));
+        }
       }
     }
     public override string ToString()
