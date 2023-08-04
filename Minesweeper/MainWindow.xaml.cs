@@ -25,7 +25,7 @@ namespace Minesweeper
   {
     int row = 16;
     int column = 30;
-    int bombCount = 40;
+    int bombCount = 300;
     int maxCell = 480;
     bool started = false;
     bool leftRightBtnPressed = false;
@@ -63,7 +63,7 @@ namespace Minesweeper
       {
         foreach (var cell in GetAroundCell(bombCell))
         {
-          if (cell == null || cell.IsBomb == true || cell?.AroundBombNum != 0)
+          if (cell == null || cell.IsBomb == true || cell.AroundBombNum != 0)
             continue;
 
           foreach (var item in GetAroundCell(cell))
@@ -136,10 +136,16 @@ namespace Minesweeper
     }
     private void ListBoxItem_MouseButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
     {
-      if (!started && !leftRightBtnPressed && listBox.SelectedItem != null)
+      if (!leftRightBtnPressed && listBox.SelectedItem != null)
       {
-        started = true;
-        InitGame();
+        if (!started)
+        {
+          started = true;
+          InitGame();
+        }
+        Cell seleCell = (Cell)listBox.SelectedItem;
+        seleCell.IsOpened = true;
+        seleCell.Flag = CellFlag.None;
       }
       leftRightBtnPressed = false;
       listBox.SelectedItem = null;

@@ -7,7 +7,7 @@
         xmlns:converter="clr-namespace:Minesweeper.Resources.Converters"
         xmlns:local="clr-namespace:Minesweeper"
         mc:Ignorable="d"
-        Title="扫雷" Height="464" Width="678" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize">
+        Title="扫雷" Height="504" Width="713" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize">
   <Grid>
     <Grid.RowDefinitions>
       <RowDefinition Height="auto"/>
@@ -59,6 +59,8 @@
         </ListBox.ItemsPanel>
         <ListBox.ItemContainerStyle>
           <Style TargetType="ListBoxItem">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontFamily" Value="MoolBoran"/>
             <Setter Property="Width" Value="{Binding ActualHeight,RelativeSource={RelativeSource Mode=Self}}"/>
             <Setter Property="Template">
               <Setter.Value>
@@ -76,14 +78,54 @@
                   </Grid>
 
                   <ControlTemplate.Triggers>
+                    <!--设置字体颜色-->
+                    <DataTrigger Binding="{Binding AroundBombNum}" Value="0">
+                      <Setter Property="Foreground" Value="Transparent"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding AroundBombNum}" Value="1">
+                      <Setter Property="Foreground" Value="#0000ff"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding AroundBombNum}" Value="2">
+                      <Setter Property="Foreground" Value="#008000"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding AroundBombNum}" Value="3">
+                      <Setter Property="Foreground" Value="#ff0000"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding AroundBombNum}" Value="4">
+                      <Setter Property="Foreground" Value="#000080"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding AroundBombNum}" Value="5">
+                      <Setter Property="Foreground" Value="#800000"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding AroundBombNum}" Value="6">
+                      <Setter Property="Foreground" Value="#008080"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding AroundBombNum}" Value="7">
+                      <Setter Property="Foreground" Value="#000000"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding AroundBombNum}" Value="8">
+                      <Setter Property="Foreground" Value="#808080"/>
+                    </DataTrigger>
+                    
+                    
+                    <DataTrigger Binding="{Binding IsOpened}" Value="True">
+                      <Setter Property="Fill" TargetName="leftThickness" Value="#808080"/>
+                      <Setter Property="Fill" TargetName="topThickness" Value="#808080"/>
+                      <Setter Property="Fill" TargetName="rightThickness" Value="Transparent"/>
+                      <Setter Property="Fill" TargetName="buttomThickness" Value="Transparent"/>
+                      <Setter Property="Width" TargetName="leftThickness" Value="1"/>
+                      <Setter Property="Height" TargetName="topThickness" Value="1"/>
+                    </DataTrigger>
+                    
                     <DataTrigger Binding="{Binding Pressed}" Value="True">
-                      <Setter Property="Fill" TargetName="leftThickness" Value="Transparent"/>
-                      <Setter Property="Fill" TargetName="topThickness" Value="Transparent"/>
-                      <Setter Property="Fill" TargetName="rightThickness" Value="#808080"/>
-                      <Setter Property="Fill" TargetName="buttomThickness" Value="#808080"/>
-                      <Setter Property="Width" TargetName="rightThickness" Value="1"/>
-                      <Setter Property="Height" TargetName="buttomThickness" Value="1"/>
-
+                      <Setter Property="Fill" TargetName="leftThickness" Value="#808080"/>
+                      <Setter Property="Fill" TargetName="topThickness" Value="#808080"/>
+                      <Setter Property="Fill" TargetName="rightThickness" Value="Transparent"/>
+                      <Setter Property="Fill" TargetName="buttomThickness" Value="Transparent"/>
+                      <Setter Property="Width" TargetName="leftThickness" Value="1"/>
+                      <Setter Property="Height" TargetName="topThickness" Value="1"/>
+                      <Setter Property="Width" TargetName="rightThickness" Value="0"/>
+                      <Setter Property="Height" TargetName="buttomThickness" Value="0"/>
                     </DataTrigger>
 
                     <DataTrigger Binding="{Binding Flag,Converter={x:Static converter:EnumFlagConverter.Instance},ConverterParameter={x:Static class:CellFlag.Left}}"
@@ -117,7 +159,7 @@
                       <Setter Property="ContentTemplate">
                         <Setter.Value>
                           <DataTemplate>
-                            <TextBlock Text="{Binding AroundBombNum}" FontWeight="Black" TextAlignment="Center"/>
+                            <TextBlock Margin="-3 -1 -2 -2" Text="{Binding AroundBombNum}" FontWeight="Black" TextAlignment="Center"/>
                           </DataTemplate>
                         </Setter.Value>
                       </Setter>
