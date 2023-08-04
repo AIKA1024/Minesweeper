@@ -25,7 +25,7 @@ namespace Minesweeper
   {
     int row = 16;
     int column = 30;
-    int bombCount = 300;
+    int bombCount = 200;
     int maxCell = 480;
     bool started = false;
     bool leftRightBtnPressed = false;
@@ -136,7 +136,7 @@ namespace Minesweeper
     }
     private void ListBoxItem_MouseButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
     {
-      if (!leftRightBtnPressed && listBox.SelectedItem != null)
+      if (!leftRightBtnPressed && e.ChangedButton == MouseButton.Left && listBox.SelectedItem != null)
       {
         if (!started)
         {
