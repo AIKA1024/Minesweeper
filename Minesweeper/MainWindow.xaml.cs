@@ -47,6 +47,7 @@ namespace Minesweeper
     private void InitGame()
     {
       Cell SeleCell = (Cell)listBox.SelectedItem;
+      var bombList = new List<Cell>();
       //布雷
       for (int i = 0; i < bombCount; i++)
       {
@@ -55,18 +56,23 @@ namespace Minesweeper
           bombIndex = Random.Shared.Next(0, maxCell);
 
         CellList[bombIndex].IsBomb = true;
+        bombList.Add(CellList[bombIndex]);
       }
       //计算周围雷数
-      foreach (var cell in CellList)
+      foreach (var bombCell in bombList)
       {
-        if (cell.IsBomb)
-          continue;
+        foreach (var cell in GetAroundCell(bombCell))
+        {
+          if (cell == null || cell.IsBomb == true || cell?.AroundBombNum != 0)
+            continue;
 
-        foreach (var item in GetAroundCell(cell))
-          if (item?.IsBomb == true)
-            cell.AroundBombNum++;
+          foreach (var item in GetAroundCell(cell))
+          {
+            if (item?.IsBomb == true)
+              cell.AroundBombNum++;
+          }
+        }
       }
-
     }
     private void ReCalculateOffset()
     {
@@ -176,11 +182,6 @@ namespace Minesweeper
       return result;
     }
 
-    private void Button_MouseMove(object sender, MouseEventArgs e)
-    {
-      listBox.UnselectAll();
-    }
-
     private void listBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
       foreach (var item in e.RemovedItems)
@@ -188,6 +189,11 @@ namespace Minesweeper
         ((Cell)item).Pressed = false;
       }
       UpdatePressLattice();
+    }
+
+    private void Button_Click(object sender, RoutedEventArgs e)
+    {
+
     }
   }
 }

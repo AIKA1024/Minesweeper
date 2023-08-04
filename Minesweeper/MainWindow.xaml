@@ -32,7 +32,7 @@
         <Grid Margin="8">
           <TextBlock Height="26" Width="40" FontSize="22" TextAlignment="Center" FontFamily="{StaticResource LCD}"
                  Background="Black" Foreground="Red" HorizontalAlignment="Left" Text="000"/>
-          <Button HorizontalAlignment="Center" Width="40" MouseMove="Button_MouseMove"/>
+          <Button HorizontalAlignment="Center" Width="40" Click="Button_Click"/>
           <TextBlock Height="26" Width="40" FontSize="22" TextAlignment="Center" FontFamily="{StaticResource LCD}"
                  Background="Black" Foreground="Red" HorizontalAlignment="Right" Text="000"/>
         </Grid>
