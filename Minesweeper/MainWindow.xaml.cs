@@ -91,14 +91,14 @@ namespace Minesweeper
       offsetList.Add(column + 1);
     }
 
-    private void UpdatePressLattice()
+    private void UpdatePressCell()
     {
-      foreach (Cell? lattice in lastPressList)
+      foreach (Cell? cell in lastPressList)
       {
-        if (lattice == null)
+        if (cell == null)
           continue;
-        lattice.Pressed = false;
-        lattice.Flag = CellFlag.None;
+        cell.Pressed = false;
+        cell.Flag = CellFlag.None;
       }
       lastPressList.Clear();
 
@@ -143,14 +143,14 @@ namespace Minesweeper
       }
       leftRightBtnPressed = false;
       listBox.SelectedItem = null;
-      UpdatePressLattice();
+      UpdatePressCell();
     }
     private void ListBoxItem_MouseDown(object sender, MouseButtonEventArgs e)
     {
       if (e.LeftButton == MouseButtonState.Pressed && e.RightButton == MouseButtonState.Pressed)
       {
         leftRightBtnPressed = true;
-        UpdatePressLattice();
+        UpdatePressCell();
       }
     }
     private void listBox_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
@@ -158,9 +158,9 @@ namespace Minesweeper
       listBox.SelectedItem = null;
     }
 
-    private List<Cell?> GetAroundCell(Cell lattice)
+    private List<Cell?> GetAroundCell(Cell cell)
     {
-      int index = CellList.IndexOf(lattice);
+      int index = CellList.IndexOf(cell);
       int inRow = index / row;
       int inColumn = index % column;
       var result = new List<Cell?>();
@@ -188,7 +188,7 @@ namespace Minesweeper
       {
         ((Cell)item).Pressed = false;
       }
-      UpdatePressLattice();
+      UpdatePressCell();
     }
 
     private void Button_Click(object sender, RoutedEventArgs e)
