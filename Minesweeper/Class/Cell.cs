@@ -34,7 +34,6 @@ namespace Minesweeper.Class
       }
     }
     private bool isOpened;
-
     public bool IsOpened
     {
       get { return isOpened; }
@@ -47,6 +46,21 @@ namespace Minesweeper.Class
         }
       }
     }
+    private bool isFlaged;
+
+    public bool IsFlaged
+    {
+      get { return isFlaged; }
+      set
+      {
+        if (isFlaged != value)
+        {
+          isFlaged = value;
+          PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsFlaged)));
+        }
+      }
+    }
+
 
     private bool isBomb;
     public bool IsBomb 

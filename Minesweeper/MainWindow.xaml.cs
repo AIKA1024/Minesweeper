@@ -25,10 +25,12 @@ namespace Minesweeper
   {
     int row = 16;
     int column = 30;
-    int bombCount = 200;
+    int bombCount = 100;
     int maxCell = 480;
     bool started = false;
-    bool leftRightBtnPressed = false;
+    //bool leftRightBtnPressed = false;
+    MouseButtonState leftButton = MouseButtonState.Released;
+    MouseButtonState rightButton = MouseButtonState.Released;
     readonly List<int> offsetList = new List<int>(9);
     readonly List<Cell?> lastPressList = new List<Cell?>();
     public ObservableCollection<Cell> CellList { get; set; }
@@ -105,7 +107,7 @@ namespace Minesweeper
       if (listBox.SelectedItem == null)
         return;
 
-      if (leftRightBtnPressed)
+      if (leftButton == MouseButtonState.Pressed && rightButton == MouseButtonState.Pressed)
       {
         List<Cell?> aroundCell = GetAroundCell((Cell)listBox.SelectedItem);
         for (int i = 0; i < aroundCell.Count; i++)
@@ -134,36 +136,58 @@ namespace Minesweeper
         lastPressList.Add((Cell)listBox.SelectedItem);
       }
     }
-    private void ListBoxItem_MouseButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+
+    /// <summary>
+    /// 获取上下左右四个方向的格子
+    /// </summary>
+    /// <param name=""></param>
+    /// <returns></returns>
+    private List<Cell> GetUDLFCell(Cell cell)
     {
-      if (!leftRightBtnPressed && e.ChangedButton == MouseButton.Left && listBox.SelectedItem != null)
+      int index = CellList.IndexOf(cell);
+      var result = new List<Cell>();
+      for (int i = 1; i < 8; i += 2)
       {
-        if (!started)
+        int offset = index + offsetList[i];
+        int offsetRow = i / 3;
+        if (offset >= 0 && offset < maxCell &&
+          offset / column == (int)Math.Floor(((float)offsetList[offsetRow * 3 + 1] + index) / (float)column))//格子位置在最小、最大值范围内，并且九宫格有三行，该偏移量的位置和该行中间的偏移量对列数的商相等，说明没有换行
         {
-          started = true;
-          InitGame();
+          result.Add(CellList[offset]);
         }
-        Cell seleCell = (Cell)listBox.SelectedItem;
-        seleCell.IsOpened = true;
-        seleCell.Flag = CellFlag.None;
       }
-      leftRightBtnPressed = false;
-      listBox.SelectedItem = null;
-      UpdatePressCell();
+      return result;
     }
-    private void ListBoxItem_MouseDown(object sender, MouseButtonEventArgs e)
+    /// <summary>
+    /// 获取周围8个格子,不包含空格
+    /// </summary>
+    /// <param name="cell"></param>
+    /// <returns></returns>
+    private List<Cell> GetAroundValidCell(Cell cell)
     {
-      if (e.LeftButton == MouseButtonState.Pressed && e.RightButton == MouseButtonState.Pressed)
+      int index = CellList.IndexOf(cell);
+      int inRow = index / row;
+      int inColumn = index % column;
+      var result = new List<Cell>();
+
+      for (int i = 0; i < offsetList.Count; i++)
       {
-        leftRightBtnPressed = true;
-        UpdatePressCell();
+        int offset = index + offsetList[i];
+        int offsetRow = i / 3;
+        if (offset >= 0 && offset < maxCell &&
+          offset / column == (int)Math.Floor(((float)offsetList[offsetRow * 3 + 1] + index) / (float)column))//格子位置在最小、最大值范围内，并且九宫格有三行，该偏移量的位置和该行中间的偏移量对列数的商相等，说明没有换行
+        {
+          result.Add(CellList[offset]);
+        }
       }
-    }
-    private void listBox_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
-    {
-      listBox.SelectedItem = null;
+      return result;
     }
 
+    /// <summary>
+    /// 获取周围8个格子
+    /// </summary>
+    /// <param name="cell"></param>
+    /// <returns></returns>
     private List<Cell?> GetAroundCell(Cell cell)
     {
       int index = CellList.IndexOf(cell);
@@ -188,8 +212,69 @@ namespace Minesweeper
       return result;
     }
 
+    private void OpenCell(Cell ClickedCell)
+    {
+      ClickedCell.IsOpened = true;
+      ClickedCell.IsFlaged = false;
+      ClickedCell.Flag = CellFlag.None;
+      if (ClickedCell.AroundBombNum > 0 || ClickedCell.IsBomb)
+        return;
+      var UDLRCellList = GetAroundValidCell(ClickedCell);
+      foreach (var cell in UDLRCellList)
+      {
+        if (cell.IsOpened)
+          continue;
+
+        if (!cell.IsBomb)
+        {
+          cell.IsOpened = true;
+          if (cell.AroundBombNum == 0)
+            OpenCell(cell);
+        }
+      }
+    }
+
+    private void ListBoxItem_MouseButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+    {
+      leftButton = e.LeftButton;
+      rightButton = e.RightButton;
+      if (rightButton == MouseButtonState.Released && e.ChangedButton == MouseButton.Left && listBox.SelectedItem != null)
+      {
+        if (!started)
+        {
+          started = true;
+          InitGame();
+        }
+        Cell seleCell = (Cell)listBox.SelectedItem;
+        OpenCell(seleCell);
+      }
+      listBox.SelectedItem = null;
+      UpdatePressCell();
+    }
+    private void ListBoxItem_MouseDown(object sender, MouseButtonEventArgs e)
+    {
+      leftButton = e.LeftButton;
+      rightButton = e.RightButton;
+      if (leftButton == MouseButtonState.Pressed && rightButton == MouseButtonState.Pressed)
+      {
+        UpdatePressCell();
+      }
+    }
+    private void listBox_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+    {
+      listBox.SelectedItem = null;
+    }
+
+
     private void listBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
+      Cell cell = (Cell)listBox.SelectedItem;
+      if (leftButton == MouseButtonState.Released && rightButton == MouseButtonState.Pressed &&
+         cell != null && !cell.IsOpened)
+      {
+        cell.IsFlaged = !cell.IsFlaged;
+        return;
+      }
       foreach (var item in e.RemovedItems)
       {
         ((Cell)item).Pressed = false;

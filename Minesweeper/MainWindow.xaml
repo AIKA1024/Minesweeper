@@ -8,6 +8,9 @@
         xmlns:local="clr-namespace:Minesweeper"
         mc:Ignorable="d"
         Title="扫雷" Height="473" Width="656" WindowStartupLocation="CenterScreen">
+  <Window.Resources>
+    <BooleanToVisibilityConverter x:Key="BoolToVisConverter" />
+  </Window.Resources>
   <Grid>
     <Grid.RowDefinitions>
       <RowDefinition Height="auto"/>
@@ -149,11 +152,19 @@
             <Setter Property="ContentTemplate">
               <Setter.Value>
                 <DataTemplate>
-                  <Canvas VerticalAlignment="Center" HorizontalAlignment="Center" Height="14.5">
-                    <TextBlock Canvas.Left="-4" Canvas.Top="-1" Text="{Binding AroundBombNum}"
-                         FontFamily="MoolBoran" FontWeight="Black" FontSize="14" TextAlignment="Center"/>
-                    <Image VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="Hidden"/>
-                  </Canvas>
+                  <Grid VerticalAlignment="Center" HorizontalAlignment="Center" Height="14.5">
+                    <TextBlock Text="{Binding AroundBombNum}"
+                         FontFamily="MoolBoran" FontWeight="Black" FontSize="14" TextAlignment="Center"
+                         Visibility="{Binding IsOpened,Converter={StaticResource BoolToVisConverter}}"/>
+                    <Image>
+                      <Image.Source>
+                        <MultiBinding Converter="{x:Static converter:CellShowImageConverter.Instance}">
+                          <Binding Path="IsFlaged"/>
+                          <Binding Path="IsBomb"/>
+                        </MultiBinding>
+                      </Image.Source>
+                    </Image>
+                  </Grid>
                 </DataTemplate>
               </Setter.Value>
             </Setter>
