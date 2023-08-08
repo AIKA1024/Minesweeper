@@ -72,7 +72,7 @@
                       <ContentPresenter/>
                     </Border>
 
-                    
+
                   </Grid>
 
                   <ControlTemplate.Triggers>
@@ -109,7 +109,7 @@
                       <Setter TargetName="Border" Property="Background" Value="Red"/>
                     </DataTrigger>
 
-                    
+
                   </ControlTemplate.Triggers>
                 </ControlTemplate>
               </Setter.Value>
@@ -171,31 +171,55 @@
                       <Setter Property="Height" TargetName="topThickness" Value="1"/>
                     </DataTrigger>
 
-                    <DataTrigger Binding="{Binding Pressed}" Value="True">
+                    <MultiDataTrigger>
+                      <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding Pressed}" Value="True"/>
+                        <Condition Binding="{Binding IsFlaged}" Value="False"/>
+                      </MultiDataTrigger.Conditions>
                       <Setter Property="Fill" TargetName="leftThickness" Value="#808080"/>
                       <Setter Property="Fill" TargetName="topThickness" Value="#808080"/>
                       <Setter Property="Fill" TargetName="rightThickness" Value="Transparent"/>
                       <Setter Property="Fill" TargetName="buttomThickness" Value="Transparent"/>
                       <Setter Property="Width" TargetName="leftThickness" Value="1"/>
                       <Setter Property="Height" TargetName="topThickness" Value="1"/>
-                    </DataTrigger>
+                    </MultiDataTrigger>
 
-                    <DataTrigger Binding="{Binding Flag,Converter={x:Static converter:EnumFlagConverter.Instance},ConverterParameter={x:Static model:CellFlag.Left}}"
-                               Value="True">
+
+                    <MultiDataTrigger>
+                      <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding Flag,Converter={x:Static converter:EnumFlagConverter.Instance},ConverterParameter={x:Static model:CellFlag.Left}}"
+                               Value="True"/>
+                        <Condition Binding="{Binding IsFlaged}" Value="False"/>
+                      </MultiDataTrigger.Conditions>
                       <Setter Property="Fill" TargetName="leftThickness" Value="#808080"/>
-                    </DataTrigger>
-                    <DataTrigger Binding="{Binding Flag,Converter={x:Static converter:EnumFlagConverter.Instance},ConverterParameter={x:Static model:CellFlag.Top}}"
-                               Value="True">
-                      <Setter Property="Fill" TargetName="topThickness" Value="#808080"/>
-                    </DataTrigger>
-                    <DataTrigger Binding="{Binding Flag,Converter={x:Static converter:EnumFlagConverter.Instance},ConverterParameter={x:Static model:CellFlag.Right}}"
-                               Value="True">
-                      <Setter Property="Fill" TargetName="rightThickness" Value="Transparent"/>
-                    </DataTrigger>
-                    <DataTrigger Binding="{Binding Flag,Converter={x:Static converter:EnumFlagConverter.Instance},ConverterParameter={x:Static model:CellFlag.Bottom}}"
-                               Value="True">
-                      <Setter Property="Fill" TargetName="buttomThickness" Value="Transparent"/>
-                    </DataTrigger>
+                    </MultiDataTrigger>
+
+                    <MultiDataTrigger>
+                      <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding Flag,Converter={x:Static converter:EnumFlagConverter.Instance},ConverterParameter={x:Static model:CellFlag.Top}}"
+                               Value="True"/>
+                        <Condition Binding="{Binding IsFlaged}" Value="False"/>
+                      </MultiDataTrigger.Conditions>
+                      <Setter Property="Fill" TargetName="leftThickness" Value="#808080"/>
+                    </MultiDataTrigger>
+
+                    <MultiDataTrigger>
+                      <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding Flag,Converter={x:Static converter:EnumFlagConverter.Instance},ConverterParameter={x:Static model:CellFlag.Right}}"
+                               Value="True"/>
+                        <Condition Binding="{Binding IsFlaged}" Value="False"/>
+                      </MultiDataTrigger.Conditions>
+                      <Setter Property="Fill" TargetName="leftThickness" Value="#808080"/>
+                    </MultiDataTrigger>
+                    
+                    <MultiDataTrigger>
+                      <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding Flag,Converter={x:Static converter:EnumFlagConverter.Instance},ConverterParameter={x:Static model:CellFlag.Bottom}}"
+                               Value="True"/>
+                        <Condition Binding="{Binding IsFlaged}" Value="False"/>
+                      </MultiDataTrigger.Conditions>
+                      <Setter Property="Fill" TargetName="leftThickness" Value="#808080"/>
+                    </MultiDataTrigger>
 
                     <DataTrigger Binding="{Binding Explode}" Value="True">
                       <Setter Property="Fill" TargetName="leftThickness" Value="#808080"/>

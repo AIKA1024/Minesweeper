@@ -139,6 +139,7 @@ namespace Minesweeper
       else
       {
         Cell cell = (Cell)listBox.SelectedItem;
+        if (cell.IsFlaged == true) return;
         cell.Flag = CellFlag.Left | CellFlag.Right | CellFlag.Top | CellFlag.Bottom;
         cell.Pressed = true;
         lastPressList.Add((Cell)listBox.SelectedItem);
@@ -227,6 +228,8 @@ namespace Minesweeper
         ClickedCell.Explode = true;
         GameOver();
       }
+      if (ClickedCell.IsFlaged)
+        return;
 
       ClickedCell.IsOpened = true;
       ClickedCell.IsFlaged = false;
