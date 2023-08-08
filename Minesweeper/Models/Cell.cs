@@ -19,6 +19,16 @@ namespace Minesweeper.Models
     {
       Index = index;
     }
+    public void Init()
+    {
+      AroundBombNum = 0;
+      IsOpened = false;
+      IsFlaged = false;
+      IsBomb = false;
+      Explode = false;
+      Pressed = false;
+      flag = CellFlag.None;
+    }
     public int Index { get; set; }
     private int aroundBombNum;
     public int AroundBombNum
@@ -80,10 +90,10 @@ namespace Minesweeper.Models
     public bool Explode
     {
       get { return explode; }
-      set 
-      { 
-        explode = value; 
-        PropertyChanged?.Invoke(this,new PropertyChangedEventArgs(nameof (Explode)));
+      set
+      {
+        explode = value;
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Explode)));
       }
     }
 
@@ -115,10 +125,6 @@ namespace Minesweeper.Models
           PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Flag)));
         }
       }
-    }
-    public override string ToString()
-    {
-      return "";
     }
   }
 }

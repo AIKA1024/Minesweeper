@@ -202,10 +202,10 @@
                       <Setter Property="Fill" TargetName="topThickness" Value="#808080"/>
                       <Setter Property="Fill" TargetName="rightThickness" Value="#808080"/>
                       <Setter Property="Fill" TargetName="buttomThickness" Value="#808080"/>
-                      <Setter Property="Width" TargetName="leftThickness" Value="1"/>
-                      <Setter Property="Height" TargetName="topThickness" Value="1"/>
-                      <Setter Property="Width" TargetName="rightThickness" Value="1"/>
-                      <Setter Property="Height" TargetName="buttomThickness" Value="1"/>
+                      <Setter Property="Width" TargetName="leftThickness" Value=".1"/>
+                      <Setter Property="Height" TargetName="topThickness" Value=".1"/>
+                      <Setter Property="Width" TargetName="rightThickness" Value=".1"/>
+                      <Setter Property="Height" TargetName="buttomThickness" Value=".1"/>
                     </DataTrigger>
                   </DataTemplate.Triggers>
                 </DataTemplate>

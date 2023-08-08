@@ -29,7 +29,6 @@ namespace Minesweeper
     MouseButtonState rightButton = MouseButtonState.Released;
     readonly List<Cell?> lastPressList = new List<Cell?>();
 
-
     public MainWindow()
     {
       InitializeComponent();
@@ -41,8 +40,19 @@ namespace Minesweeper
       ReCalculateOffset();
       DataContext = gameInfo;
     }
-
     private void InitGame()
+    {
+      if (!gameInfo.started)
+        return;
+
+      foreach (var cell in gameInfo.CellList)
+      {
+        cell.Init();
+      }
+      gameInfo.started = false;
+      gameInfo.GameOver = false;
+    }
+    private void StartGame()
     {
       gameInfo.started = true;
       gameInfo.GameOver = false;
@@ -254,7 +264,7 @@ namespace Minesweeper
       if (rightButton == MouseButtonState.Released && e.ChangedButton == MouseButton.Left && listBox.SelectedItem != null)
       {
         if (!gameInfo.started)
-          InitGame();
+          StartGame();
 
         Cell seleCell = (Cell)listBox.SelectedItem;
         OpenCell(seleCell);
@@ -296,7 +306,7 @@ namespace Minesweeper
 
     private void Button_Click(object sender, RoutedEventArgs e)
     {
-
+      InitGame();
     }
 
     private void listBox_PreviewMouseDown(object sender, MouseButtonEventArgs e)
