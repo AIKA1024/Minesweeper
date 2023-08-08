@@ -29,6 +29,7 @@ namespace Minesweeper
     MouseButtonState rightButton = MouseButtonState.Released;
     readonly List<Cell?> lastPressList = new List<Cell?>();
 
+
     public MainWindow()
     {
       InitializeComponent();
@@ -46,7 +47,7 @@ namespace Minesweeper
       gameInfo.started = true;
       gameInfo.GameOver = false;
       Cell SeleCell = (Cell)listBox.SelectedItem;
-      var bombList = new List<Cell>();
+      gameInfo.BombList.Clear();
       //布雷
       for (int i = 0; i < gameInfo.bombCount; i++)
       {
@@ -55,10 +56,10 @@ namespace Minesweeper
           bombIndex = Random.Shared.Next(0, gameInfo.maxCell);
 
         gameInfo.CellList[bombIndex].IsBomb = true;
-        bombList.Add(gameInfo.CellList[bombIndex]);
+        gameInfo.BombList.Add(gameInfo.CellList[bombIndex]);
       }
       //计算周围雷数
-      foreach (var bombCell in bombList)
+      foreach (var bombCell in gameInfo.BombList)
       {
         foreach (var cell in GetAroundCell(bombCell))
         {
@@ -75,19 +76,19 @@ namespace Minesweeper
     }
     private void ReCalculateOffset()
     {
-      gameInfo.offsetList.Clear();
+      gameInfo.OffsetList.Clear();
       ///九宫格的偏移位置
-      gameInfo.offsetList.Add(-gameInfo.column - 1);
-      gameInfo.offsetList.Add(-gameInfo.column);
-      gameInfo.offsetList.Add(-gameInfo.column + 1);
+      gameInfo.OffsetList.Add(-gameInfo.column - 1);
+      gameInfo.OffsetList.Add(-gameInfo.column);
+      gameInfo.OffsetList.Add(-gameInfo.column + 1);
 
-      gameInfo.offsetList.Add(-1);
-      gameInfo.offsetList.Add(0);
-      gameInfo.offsetList.Add(1);
+      gameInfo.OffsetList.Add(-1);
+      gameInfo.OffsetList.Add(0);
+      gameInfo.OffsetList.Add(1);
 
-      gameInfo.offsetList.Add(gameInfo.column - 1);
-      gameInfo.offsetList.Add(gameInfo.column);
-      gameInfo.offsetList.Add(gameInfo.column + 1);
+      gameInfo.OffsetList.Add(gameInfo.column - 1);
+      gameInfo.OffsetList.Add(gameInfo.column);
+      gameInfo.OffsetList.Add(gameInfo.column + 1);
     }
 
     private void UpdatePressCell()
@@ -145,10 +146,10 @@ namespace Minesweeper
       var result = new List<Cell>();
       for (int i = 1; i < 8; i += 2)
       {
-        int offset = index + gameInfo.offsetList[i];
+        int offset = index + gameInfo.OffsetList[i];
         int offsetRow = i / 3;
         if (offset >= 0 && offset < gameInfo.maxCell &&
-          offset / gameInfo.column == (int)Math.Floor(((float)gameInfo.offsetList[offsetRow * 3 + 1] + index) / gameInfo.column))//格子位置在最小、最大值范围内，并且九宫格有三行，该偏移量的位置和该行中间的偏移量对列数的商相等，说明没有换行
+          offset / gameInfo.column == (int)Math.Floor(((float)gameInfo.OffsetList[offsetRow * 3 + 1] + index) / gameInfo.column))//格子位置在最小、最大值范围内，并且九宫格有三行，该偏移量的位置和该行中间的偏移量对列数的商相等，说明没有换行
         {
           result.Add(gameInfo.CellList[offset]);
         }
@@ -167,12 +168,12 @@ namespace Minesweeper
       int inColumn = index % gameInfo.column;
       var result = new List<Cell>();
 
-      for (int i = 0; i < gameInfo.offsetList.Count; i++)
+      for (int i = 0; i < gameInfo.OffsetList.Count; i++)
       {
-        int offset = index + gameInfo.offsetList[i];
+        int offset = index + gameInfo.OffsetList[i];
         int offsetRow = i / 3;
         if (offset >= 0 && offset < gameInfo.maxCell &&
-          offset / gameInfo.column == (int)Math.Floor(((float)gameInfo.offsetList[offsetRow * 3 + 1] + index) / gameInfo.column))//格子位置在最小、最大值范围内，并且九宫格有三行，该偏移量的位置和该行中间的偏移量对列数的商相等，说明没有换行
+          offset / gameInfo.column == (int)Math.Floor(((float)gameInfo.OffsetList[offsetRow * 3 + 1] + index) / gameInfo.column))//格子位置在最小、最大值范围内，并且九宫格有三行，该偏移量的位置和该行中间的偏移量对列数的商相等，说明没有换行
         {
           result.Add(gameInfo.CellList[offset]);
         }
@@ -192,12 +193,12 @@ namespace Minesweeper
       int inColumn = index % gameInfo.column;
       var result = new List<Cell?>();
 
-      for (int i = 0; i < gameInfo.offsetList.Count; i++)
+      for (int i = 0; i < gameInfo.OffsetList.Count; i++)
       {
-        int offset = index + gameInfo.offsetList[i];
+        int offset = index + gameInfo.OffsetList[i];
         int offsetRow = i / 3;
         if (offset >= 0 && offset < gameInfo.maxCell &&
-          offset / gameInfo.column == (int)Math.Floor(((float)gameInfo.offsetList[offsetRow * 3 + 1] + index) / gameInfo.column))//格子位置在最小、最大值范围内，并且九宫格有三行，该偏移量的位置和该行中间的偏移量对列数的商相等，说明没有换行
+          offset / gameInfo.column == (int)Math.Floor(((float)gameInfo.OffsetList[offsetRow * 3 + 1] + index) / gameInfo.column))//格子位置在最小、最大值范围内，并且九宫格有三行，该偏移量的位置和该行中间的偏移量对列数的商相等，说明没有换行
         {
           result.Add(gameInfo.CellList[offset]);
         }
@@ -240,6 +241,10 @@ namespace Minesweeper
     private void GameOver()
     {
       gameInfo.GameOver = true;
+      foreach (var cell in gameInfo.BombList)
+      {
+        cell.IsOpened = true;
+      }
     }
 
     private void ListBoxItem_MouseButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)

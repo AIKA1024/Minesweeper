@@ -28,7 +28,8 @@ namespace Minesweeper.Models
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(GameOver)));
       }
     }
-    public readonly List<int> offsetList = new List<int>(9);
+    public readonly List<int> OffsetList = new List<int>(9);
+    public readonly List<Cell> BombList = new List<Cell>(10);
     public ObservableCollection<Cell> CellList { get; set; }
       = new ObservableCollection<Cell>(new List<Cell>(480));
 
