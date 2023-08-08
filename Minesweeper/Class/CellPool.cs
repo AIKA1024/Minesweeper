@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Minesweeper.Models;
 
 namespace Minesweeper.Class
 {
-  public static class CellPool
+    public static class CellPool
   {
     private static List<Cell> cellPool = new List<Cell>();
     public static Cell GetCell(int index)

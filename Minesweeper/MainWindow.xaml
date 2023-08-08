@@ -1,13 +1,13 @@
-﻿<Window x:Class="Minesweeper.MainWindow"
+﻿<Window x:Name="me" x:Class="Minesweeper.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:class="clr-namespace:Minesweeper.Class"
+        xmlns:model="clr-namespace:Minesweeper.Models"
         xmlns:converter="clr-namespace:Minesweeper.Resources.Converters"
         xmlns:local="clr-namespace:Minesweeper"
         mc:Ignorable="d"
-        Title="扫雷" Height="473" Width="656" WindowStartupLocation="CenterScreen">
+        Title="扫雷" Height="430" Width="649" WindowStartupLocation="CenterScreen">
   <Window.Resources>
     <BooleanToVisibilityConverter x:Key="BoolToVisConverter" />
   </Window.Resources>
@@ -43,7 +43,7 @@
       </Grid>
       <ListBox Grid.Row="1" MouseLeave="listBox_MouseLeave" Margin="8" Padding="0" x:Name="listBox" ItemsSource="{Binding CellList}"
              ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled"
-             SelectionChanged="listBox_SelectionChanged">
+             SelectionChanged="listBox_SelectionChanged" PreviewMouseDown="listBox_PreviewMouseDown">
         <ListBox.Template>
           <ControlTemplate>
             <Grid>
@@ -68,7 +68,7 @@
                 <ControlTemplate TargetType="ListBoxItem">
                   <Grid MouseUp="ListBoxItem_MouseButtonUp"
                       MouseDown="ListBoxItem_MouseDown">
-                    <Border Padding="3" x:Name="Bd"  Background="#c0c0c0">
+                    <Border Padding="3" x:Name="Border"  Background="#c0c0c0">
                       <ContentPresenter/>
                     </Border>
 
@@ -108,6 +108,9 @@
                       <Setter Property="Foreground" Value="#808080"/>
                     </DataTrigger>
 
+                    <DataTrigger Binding="{Binding Explode}" Value="True">
+                      <Setter TargetName="Border" Property="Background" Value="Red"/>
+                    </DataTrigger>
 
                     <DataTrigger Binding="{Binding IsOpened}" Value="True">
                       <Setter Property="Fill" TargetName="leftThickness" Value="#808080"/>
@@ -129,19 +132,19 @@
                       <Setter Property="Height" TargetName="buttomThickness" Value="0"/>
                     </DataTrigger>
 
-                    <DataTrigger Binding="{Binding Flag,Converter={x:Static converter:EnumFlagConverter.Instance},ConverterParameter={x:Static class:CellFlag.Left}}"
+                    <DataTrigger Binding="{Binding Flag,Converter={x:Static converter:EnumFlagConverter.Instance},ConverterParameter={x:Static model:CellFlag.Left}}"
                                Value="True">
                       <Setter Property="Fill" TargetName="leftThickness" Value="#808080"/>
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Flag,Converter={x:Static converter:EnumFlagConverter.Instance},ConverterParameter={x:Static class:CellFlag.Top}}"
+                    <DataTrigger Binding="{Binding Flag,Converter={x:Static converter:EnumFlagConverter.Instance},ConverterParameter={x:Static model:CellFlag.Top}}"
                                Value="True">
                       <Setter Property="Fill" TargetName="topThickness" Value="#808080"/>
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Flag,Converter={x:Static converter:EnumFlagConverter.Instance},ConverterParameter={x:Static class:CellFlag.Right}}"
+                    <DataTrigger Binding="{Binding Flag,Converter={x:Static converter:EnumFlagConverter.Instance},ConverterParameter={x:Static model:CellFlag.Right}}"
                                Value="True">
                       <Setter Property="Fill" TargetName="rightThickness" Value="Transparent"/>
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Flag,Converter={x:Static converter:EnumFlagConverter.Instance},ConverterParameter={x:Static class:CellFlag.Bottom}}"
+                    <DataTrigger Binding="{Binding Flag,Converter={x:Static converter:EnumFlagConverter.Instance},ConverterParameter={x:Static model:CellFlag.Bottom}}"
                                Value="True">
                       <Setter Property="Fill" TargetName="buttomThickness" Value="Transparent"/>
                     </DataTrigger>
@@ -152,11 +155,36 @@
             <Setter Property="ContentTemplate">
               <Setter.Value>
                 <DataTemplate>
-                  <Grid VerticalAlignment="Center" HorizontalAlignment="Center" Height="14.5">
+                  <Grid VerticalAlignment="Center" HorizontalAlignment="Center" Height="13">
                     <TextBlock Text="{Binding AroundBombNum}"
                          FontFamily="MoolBoran" FontWeight="Black" FontSize="14" TextAlignment="Center"
                          Visibility="{Binding IsOpened,Converter={StaticResource BoolToVisConverter}}"/>
-                    <Image>
+                    <Image RenderOptions.BitmapScalingMode="NearestNeighbor">
+                      <Image.Style>
+                        <Style TargetType="Image">
+                          <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsFlaged}" Value="True">
+                              <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+
+                            <MultiDataTrigger>
+                              <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding IsBomb}" Value="True"/>
+                                <Condition Binding="{Binding DataContext.GameOver,ElementName=me}" Value="True"/>
+                              </MultiDataTrigger.Conditions>
+                              <Setter Property="Visibility" Value="Visible"/>
+                            </MultiDataTrigger>
+
+                            <MultiDataTrigger>
+                              <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding IsFlaged}" Value="False"/>
+                                <Condition Binding="{Binding DataContext.GameOver,ElementName=me}" Value="False"/>
+                              </MultiDataTrigger.Conditions>
+                              <Setter Property="Visibility" Value="Hidden"/>
+                            </MultiDataTrigger>
+                          </Style.Triggers>
+                        </Style>
+                      </Image.Style>
                       <Image.Source>
                         <MultiBinding Converter="{x:Static converter:CellShowImageConverter.Instance}">
                           <Binding Path="IsFlaged"/>

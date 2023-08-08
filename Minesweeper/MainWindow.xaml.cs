@@ -1,4 +1,5 @@
 ﻿using Minesweeper.Class;
+using Minesweeper.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -18,47 +19,43 @@ using System.Windows.Shapes;
 
 namespace Minesweeper
 {
-  /// <summary>
-  /// Interaction logic for MainWindow.xaml
-  /// </summary>
-  public partial class MainWindow : Window
+    /// <summary>
+    /// Interaction logic for MainWindow.xaml
+    /// </summary>
+    public partial class MainWindow : Window
   {
-    int row = 16;
-    int column = 30;
-    int bombCount = 100;
-    int maxCell = 480;
-    bool started = false;
-    //bool leftRightBtnPressed = false;
+    GameInfo gameInfo;
     MouseButtonState leftButton = MouseButtonState.Released;
     MouseButtonState rightButton = MouseButtonState.Released;
-    readonly List<int> offsetList = new List<int>(9);
     readonly List<Cell?> lastPressList = new List<Cell?>();
-    public ObservableCollection<Cell> CellList { get; set; }
-      = new ObservableCollection<Cell>(new List<Cell>(480));
+
     public MainWindow()
     {
       InitializeComponent();
-      for (int i = 0; i < maxCell; i++)
+      gameInfo = new GameInfo();
+      for (int i = 0; i < gameInfo.maxCell; i++)
       {
-        CellList.Add(CellPool.GetCell(i));
+        gameInfo.CellList.Add(CellPool.GetCell(i));
       }
       ReCalculateOffset();
-      DataContext = this;
+      DataContext = gameInfo;
     }
 
     private void InitGame()
     {
+      gameInfo.started = true;
+      gameInfo.GameOver = false;
       Cell SeleCell = (Cell)listBox.SelectedItem;
       var bombList = new List<Cell>();
       //布雷
-      for (int i = 0; i < bombCount; i++)
+      for (int i = 0; i < gameInfo.bombCount; i++)
       {
-        int bombIndex = Random.Shared.Next(0, maxCell);
-        while (bombIndex == SeleCell.Index || CellList[bombIndex].IsBomb == true)
-          bombIndex = Random.Shared.Next(0, maxCell);
+        int bombIndex = Random.Shared.Next(0, gameInfo.maxCell);
+        while (bombIndex == SeleCell.Index || gameInfo.CellList[bombIndex].IsBomb == true)
+          bombIndex = Random.Shared.Next(0, gameInfo.maxCell);
 
-        CellList[bombIndex].IsBomb = true;
-        bombList.Add(CellList[bombIndex]);
+        gameInfo.CellList[bombIndex].IsBomb = true;
+        bombList.Add(gameInfo.CellList[bombIndex]);
       }
       //计算周围雷数
       foreach (var bombCell in bombList)
@@ -78,19 +75,19 @@ namespace Minesweeper
     }
     private void ReCalculateOffset()
     {
-      offsetList.Clear();
+      gameInfo.offsetList.Clear();
       ///九宫格的偏移位置
-      offsetList.Add(-column - 1);
-      offsetList.Add(-column);
-      offsetList.Add(-column + 1);
+      gameInfo.offsetList.Add(-gameInfo.column - 1);
+      gameInfo.offsetList.Add(-gameInfo.column);
+      gameInfo.offsetList.Add(-gameInfo.column + 1);
 
-      offsetList.Add(-1);
-      offsetList.Add(0);
-      offsetList.Add(1);
+      gameInfo.offsetList.Add(-1);
+      gameInfo.offsetList.Add(0);
+      gameInfo.offsetList.Add(1);
 
-      offsetList.Add(column - 1);
-      offsetList.Add(column);
-      offsetList.Add(column + 1);
+      gameInfo.offsetList.Add(gameInfo.column - 1);
+      gameInfo.offsetList.Add(gameInfo.column);
+      gameInfo.offsetList.Add(gameInfo.column + 1);
     }
 
     private void UpdatePressCell()
@@ -144,16 +141,16 @@ namespace Minesweeper
     /// <returns></returns>
     private List<Cell> GetUDLFCell(Cell cell)
     {
-      int index = CellList.IndexOf(cell);
+      int index = gameInfo.CellList.IndexOf(cell);
       var result = new List<Cell>();
       for (int i = 1; i < 8; i += 2)
       {
-        int offset = index + offsetList[i];
+        int offset = index + gameInfo.offsetList[i];
         int offsetRow = i / 3;
-        if (offset >= 0 && offset < maxCell &&
-          offset / column == (int)Math.Floor(((float)offsetList[offsetRow * 3 + 1] + index) / (float)column))//格子位置在最小、最大值范围内，并且九宫格有三行，该偏移量的位置和该行中间的偏移量对列数的商相等，说明没有换行
+        if (offset >= 0 && offset < gameInfo.maxCell &&
+          offset / gameInfo.column == (int)Math.Floor(((float)gameInfo.offsetList[offsetRow * 3 + 1] + index) / gameInfo.column))//格子位置在最小、最大值范围内，并且九宫格有三行，该偏移量的位置和该行中间的偏移量对列数的商相等，说明没有换行
         {
-          result.Add(CellList[offset]);
+          result.Add(gameInfo.CellList[offset]);
         }
       }
       return result;
@@ -165,19 +162,19 @@ namespace Minesweeper
     /// <returns></returns>
     private List<Cell> GetAroundValidCell(Cell cell)
     {
-      int index = CellList.IndexOf(cell);
-      int inRow = index / row;
-      int inColumn = index % column;
+      int index = gameInfo.CellList.IndexOf(cell);
+      int inRow = index / gameInfo.row;
+      int inColumn = index % gameInfo.column;
       var result = new List<Cell>();
 
-      for (int i = 0; i < offsetList.Count; i++)
+      for (int i = 0; i < gameInfo.offsetList.Count; i++)
       {
-        int offset = index + offsetList[i];
+        int offset = index + gameInfo.offsetList[i];
         int offsetRow = i / 3;
-        if (offset >= 0 && offset < maxCell &&
-          offset / column == (int)Math.Floor(((float)offsetList[offsetRow * 3 + 1] + index) / (float)column))//格子位置在最小、最大值范围内，并且九宫格有三行，该偏移量的位置和该行中间的偏移量对列数的商相等，说明没有换行
+        if (offset >= 0 && offset < gameInfo.maxCell &&
+          offset / gameInfo.column == (int)Math.Floor(((float)gameInfo.offsetList[offsetRow * 3 + 1] + index) / gameInfo.column))//格子位置在最小、最大值范围内，并且九宫格有三行，该偏移量的位置和该行中间的偏移量对列数的商相等，说明没有换行
         {
-          result.Add(CellList[offset]);
+          result.Add(gameInfo.CellList[offset]);
         }
       }
       return result;
@@ -190,19 +187,19 @@ namespace Minesweeper
     /// <returns></returns>
     private List<Cell?> GetAroundCell(Cell cell)
     {
-      int index = CellList.IndexOf(cell);
-      int inRow = index / row;
-      int inColumn = index % column;
+      int index = gameInfo.CellList.IndexOf(cell);
+      int inRow = index / gameInfo.row;
+      int inColumn = index % gameInfo.column;
       var result = new List<Cell?>();
 
-      for (int i = 0; i < offsetList.Count; i++)
+      for (int i = 0; i < gameInfo.offsetList.Count; i++)
       {
-        int offset = index + offsetList[i];
+        int offset = index + gameInfo.offsetList[i];
         int offsetRow = i / 3;
-        if (offset >= 0 && offset < maxCell &&
-          offset / column == (int)Math.Floor(((float)offsetList[offsetRow * 3 + 1] + index) / (float)column))//格子位置在最小、最大值范围内，并且九宫格有三行，该偏移量的位置和该行中间的偏移量对列数的商相等，说明没有换行
+        if (offset >= 0 && offset < gameInfo.maxCell &&
+          offset / gameInfo.column == (int)Math.Floor(((float)gameInfo.offsetList[offsetRow * 3 + 1] + index) / gameInfo.column))//格子位置在最小、最大值范围内，并且九宫格有三行，该偏移量的位置和该行中间的偏移量对列数的商相等，说明没有换行
         {
-          result.Add(CellList[offset]);
+          result.Add(gameInfo.CellList[offset]);
         }
         else
         {
@@ -214,6 +211,12 @@ namespace Minesweeper
 
     private void OpenCell(Cell ClickedCell)
     {
+      if (ClickedCell.IsBomb)
+      {
+        ClickedCell.Explode = true;
+        GameOver();
+      }
+
       ClickedCell.IsOpened = true;
       ClickedCell.IsFlaged = false;
       ClickedCell.Flag = CellFlag.None;
@@ -234,17 +237,20 @@ namespace Minesweeper
       }
     }
 
+    private void GameOver()
+    {
+      gameInfo.GameOver = true;
+    }
+
     private void ListBoxItem_MouseButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
     {
       leftButton = e.LeftButton;
       rightButton = e.RightButton;
       if (rightButton == MouseButtonState.Released && e.ChangedButton == MouseButton.Left && listBox.SelectedItem != null)
       {
-        if (!started)
-        {
-          started = true;
+        if (!gameInfo.started)
           InitGame();
-        }
+
         Cell seleCell = (Cell)listBox.SelectedItem;
         OpenCell(seleCell);
       }
@@ -268,6 +274,7 @@ namespace Minesweeper
 
     private void listBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
+
       Cell cell = (Cell)listBox.SelectedItem;
       if (leftButton == MouseButtonState.Released && rightButton == MouseButtonState.Pressed &&
          cell != null && !cell.IsOpened)
@@ -285,6 +292,12 @@ namespace Minesweeper
     private void Button_Click(object sender, RoutedEventArgs e)
     {
 
+    }
+
+    private void listBox_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+    {
+      if (gameInfo.GameOver)
+        e.Handled = true;
     }
   }
 }

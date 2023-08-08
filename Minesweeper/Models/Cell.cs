@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 
-namespace Minesweeper.Class
+namespace Minesweeper.Models
 {
   [Flags]
   public enum CellFlag
@@ -21,7 +21,7 @@ namespace Minesweeper.Class
     }
     public int Index { get; set; }
     private int aroundBombNum;
-    public int AroundBombNum 
+    public int AroundBombNum
     {
       get { return aroundBombNum; }
       set
@@ -37,8 +37,8 @@ namespace Minesweeper.Class
     public bool IsOpened
     {
       get { return isOpened; }
-      set 
-      { 
+      set
+      {
         if (isOpened != value)
         {
           isOpened = value;
@@ -63,16 +63,27 @@ namespace Minesweeper.Class
 
 
     private bool isBomb;
-    public bool IsBomb 
+    public bool IsBomb
     {
       get { return isBomb; }
       set
       {
-        if (isBomb!=value) 
+        if (isBomb != value)
         {
           isBomb = value;
-          PropertyChanged?.Invoke(this,new PropertyChangedEventArgs(nameof(IsBomb)));
+          PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsBomb)));
         }
+      }
+    }
+    private bool explode;
+
+    public bool Explode
+    {
+      get { return explode; }
+      set 
+      { 
+        explode = value; 
+        PropertyChanged?.Invoke(this,new PropertyChangedEventArgs(nameof (Explode)));
       }
     }
 

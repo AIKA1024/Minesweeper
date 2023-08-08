@@ -5,24 +5,31 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
-    <ApplicationIcon>Resources\ico.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\Ico.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="Resources\Bomb.png" />
     <None Remove="Resources\Flag.png" />
+    <None Remove="Resources\Ico.ico" />
     <None Remove="Resources\LCD.ttf" />
+    <None Remove="Resources\MistakeFlag.png" />
     <None Remove="Resources\电子数字.ttf" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="Resources\ico.ico" />
   </ItemGroup>
 
   <ItemGroup>
     <Resource Include="Resources\Bomb.png" />
     <Resource Include="Resources\Flag.png" />
+    <Resource Include="Resources\MistakeFlag.png" />
     <Resource Include="Resources\电子数字.ttf" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_DeploymentManifestIconFile Remove="Resources\Ico.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Resources\Ico.ico" />
   </ItemGroup>
 
 </Project>
