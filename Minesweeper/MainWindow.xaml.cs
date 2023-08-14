@@ -145,7 +145,32 @@ namespace Minesweeper
         lastPressList.Add((Cell)listBox.SelectedItem);
       }
     }
+    private void OpenAroundCellBYFlag()
+    {
+      Cell SelectCell = (Cell)listBox.SelectedItem;
+      var aroundCell = GetAroundValidCell(SelectCell);
+      if (SelectCell.AroundBombNum != aroundCell.Where(c=>c.IsFlaged).Count())
+        return;
 
+      foreach (var cell in aroundCell)
+      {
+
+        if (cell.IsFlaged||cell.IsOpened)
+          continue;
+
+        if (cell.IsBomb)
+        {
+          cell.Explode = true;
+          GameOver();
+        }
+        if (cell.IsFlaged)
+          return;
+
+        cell.IsOpened = true;
+        cell.IsFlaged = false;
+        cell.Flag = CellFlag.None;
+      }
+    }
     /// <summary>
     /// 获取上下左右四个方向的格子
     /// </summary>
@@ -253,10 +278,14 @@ namespace Minesweeper
 
     private void GameOver()
     {
+      if (gameInfo.GameOver)
+        return;
+
       gameInfo.GameOver = true;
       foreach (var cell in gameInfo.BombList)
       {
-        cell.IsOpened = true;
+        if (!cell.IsFlaged)
+          cell.IsOpened = true;
       }
     }
 
@@ -264,13 +293,18 @@ namespace Minesweeper
     {
       leftButton = e.LeftButton;
       rightButton = e.RightButton;
+      Cell seleCell = (Cell)((Grid)sender).DataContext;
+      if (seleCell.IsOpened && (leftButton == MouseButtonState.Pressed || rightButton == MouseButtonState.Pressed))
+      {
+        OpenAroundCellBYFlag();
+      }
       if (rightButton == MouseButtonState.Released && e.ChangedButton == MouseButton.Left && listBox.SelectedItem != null)
       {
         if (!gameInfo.started)
           StartGame();
 
-        Cell seleCell = (Cell)listBox.SelectedItem;
-        OpenCell(seleCell);
+        if (!seleCell.IsOpened)
+          OpenCell(seleCell);
       }
       listBox.SelectedItem = null;
       UpdatePressCell();
@@ -309,7 +343,10 @@ namespace Minesweeper
 
     private void Button_Click(object sender, RoutedEventArgs e)
     {
-      InitGame();
+      if (gameInfo.GameOver)
+      {
+        InitGame();
+      }
     }
 
     private void listBox_PreviewMouseDown(object sender, MouseButtonEventArgs e)
