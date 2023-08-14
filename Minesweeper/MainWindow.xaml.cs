@@ -259,7 +259,7 @@ namespace Minesweeper
       ClickedCell.IsOpened = true;
       ClickedCell.IsFlaged = false;
       ClickedCell.Flag = CellFlag.None;
-      if (ClickedCell.AroundBombNum > 0 || ClickedCell.IsBomb)
+      if (ClickedCell.IsBomb||ClickedCell.AroundBombNum>0)
         return;
       var UDLRCellList = GetAroundValidCell(ClickedCell);
       foreach (var cell in UDLRCellList)
@@ -270,7 +270,7 @@ namespace Minesweeper
         if (!cell.IsBomb)
         {
           cell.IsOpened = true;
-          if (cell.AroundBombNum == 0)
+          if (cell.AroundBombNum == 0 || ClickedCell.AroundBombNum == 0)
             OpenCell(cell);
         }
       }
