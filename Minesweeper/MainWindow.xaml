@@ -16,9 +16,22 @@
       <RowDefinition Height="auto"/>
       <RowDefinition/>
     </Grid.RowDefinitions>
-    <Menu FontSize="14" Background="White" BorderThickness="0 0 0 1.5" BorderBrush="#f0f0f0">
-      <MenuItem Header="菜单"/>
+    <Menu FontSize="12" Background="White" BorderThickness="0 0 0 1.5" BorderBrush="#f0f0f0">
+      <MenuItem Header="游戏">
+        <MenuItem Header="初级"/>
+        <MenuItem Header="中级"/>
+        <MenuItem Header="高级"/>
+        <MenuItem Header="自定义"/>
+        <Separator/>
+        <MenuItem Header="标记"/>
+        <Separator/>
+        <MenuItem Header="扫雷英雄榜"/>
+        <Separator/>
+        <MenuItem Header="退出"/>
+
+      </MenuItem>
       <MenuItem Header="帮助"/>
+      <MenuItem Header="作弊"/>
     </Menu>
 
     <Grid Grid.Row="1" Margin="3 3 0 0" Background="#c0c0c0">
