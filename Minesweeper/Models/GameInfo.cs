@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Minesweeper.Models
 {
@@ -15,10 +11,10 @@ namespace Minesweeper.Models
     public int Row
     {
       get { return row; }
-      set 
-      { 
-        row = value; 
-        PropertyChanged?.Invoke(this,new PropertyChangedEventArgs(nameof(Row)));
+      set
+      {
+        row = value;
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Row)));
       }
     }
     private int column = 30;

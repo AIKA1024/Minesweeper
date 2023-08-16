@@ -3,20 +3,10 @@ using Minesweeper.Models;
 using Minesweeper.Windows;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Minesweeper
 {
@@ -188,14 +178,13 @@ namespace Minesweeper
     /// <returns></returns>
     private List<Cell> GetUDLFCell(Cell cell)
     {
-      int index = gameInfo.CellList.IndexOf(cell);
       var result = new List<Cell>();
       for (int i = 1; i < 8; i += 2)
       {
-        int offset = index + gameInfo.OffsetList[i];
+        int offset = cell.Index + gameInfo.OffsetList[i];
         int offsetRow = i / 3;
         if (offset >= 0 && offset < gameInfo.maxCell &&
-          offset / gameInfo.Column == (int)Math.Floor(((float)gameInfo.OffsetList[offsetRow * 3 + 1] + index) / gameInfo.Column))//格子位置在最小、最大值范围内，并且九宫格有三行，该偏移量的位置和该行中间的偏移量对列数的商相等，说明没有换行
+          offset / gameInfo.Column == (int)Math.Floor(((float)gameInfo.OffsetList[offsetRow * 3 + 1] + cell.Index) / gameInfo.Column))//格子位置在最小、最大值范围内，并且九宫格有三行，该偏移量的位置和该行中间的偏移量对列数的商相等，说明没有换行
         {
           result.Add(gameInfo.CellList[offset]);
         }
@@ -209,17 +198,14 @@ namespace Minesweeper
     /// <returns></returns>
     private List<Cell> GetAroundValidCell(Cell cell)
     {
-      int index = gameInfo.CellList.IndexOf(cell);
-      int inRow = index / gameInfo.Row;
-      int inColumn = index % gameInfo.Column;
       var result = new List<Cell>();
 
       for (int i = 0; i < gameInfo.OffsetList.Count; i++)
       {
-        int offset = index + gameInfo.OffsetList[i];
+        int offset = cell.Index + gameInfo.OffsetList[i];
         int offsetRow = i / 3;
         if (offset >= 0 && offset < gameInfo.maxCell &&
-          offset / gameInfo.Column == (int)Math.Floor(((float)gameInfo.OffsetList[offsetRow * 3 + 1] + index) / gameInfo.Column))//格子位置在最小、最大值范围内，并且九宫格有三行，该偏移量的位置和该行中间的偏移量对列数的商相等，说明没有换行
+          offset / gameInfo.Column == (int)Math.Floor(((float)gameInfo.OffsetList[offsetRow * 3 + 1] + cell.Index) / gameInfo.Column))//格子位置在最小、最大值范围内，并且九宫格有三行，该偏移量的位置和该行中间的偏移量对列数的商相等，说明没有换行
         {
           result.Add(gameInfo.CellList[offset]);
         }
@@ -234,17 +220,13 @@ namespace Minesweeper
     /// <returns></returns>
     private List<Cell?> GetAroundCell(Cell cell)
     {
-      int index = gameInfo.CellList.IndexOf(cell);
-      int inRow = index / gameInfo.Row;
-      int inColumn = index % gameInfo.Column;
       var result = new List<Cell?>();
-
       for (int i = 0; i < gameInfo.OffsetList.Count; i++)
       {
-        int offset = index + gameInfo.OffsetList[i];
+        int offset = cell.Index + gameInfo.OffsetList[i];
         int offsetRow = i / 3;
         if (offset >= 0 && offset < gameInfo.maxCell &&
-          offset / gameInfo.Column == (int)Math.Floor(((float)gameInfo.OffsetList[offsetRow * 3 + 1] + index) / gameInfo.Column))//格子位置在最小、最大值范围内，并且九宫格有三行，该偏移量的位置和该行中间的偏移量对列数的商相等，说明没有换行
+          offset / gameInfo.Column == (int)Math.Floor(((float)gameInfo.OffsetList[offsetRow * 3 + 1] + cell.Index) / gameInfo.Column))//格子位置在最小、最大值范围内，并且九宫格有三行，该偏移量的位置和该行中间的偏移量对列数的商相等，说明没有换行
         {
           result.Add(gameInfo.CellList[offset]);
         }
