@@ -16,6 +16,7 @@ namespace Minesweeper.Models
     public int column = 30;
     public int bombCount = 100;
     public int maxCell = 480;
+    public bool useMark = true;
     public bool started = false;
 
     private bool gameOver;

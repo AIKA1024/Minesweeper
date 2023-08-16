@@ -14,13 +14,15 @@
     <None Remove="Resources\Ico.ico" />
     <None Remove="Resources\LCD.ttf" />
     <None Remove="Resources\MistakeFlag.png" />
+    <None Remove="Resources\Pictures\QuestionMark.png" />
     <None Remove="Resources\电子数字.ttf" />
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Resources\Bomb.png" />
-    <Resource Include="Resources\Flag.png" />
-    <Resource Include="Resources\MistakeFlag.png" />
+    <Resource Include="Resources\Pictures\Bomb.png" />
+    <Resource Include="Resources\Pictures\Flag.png" />
+    <Resource Include="Resources\Pictures\MistakeFlag.png" />
+    <Resource Include="Resources\Pictures\QuestionMark.png" />
     <Resource Include="Resources\电子数字.ttf" />
   </ItemGroup>
 

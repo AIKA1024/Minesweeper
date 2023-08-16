@@ -23,7 +23,7 @@
         <MenuItem Header="高级"/>
         <MenuItem Header="自定义"/>
         <Separator/>
-        <MenuItem Header="标记"/>
+        <MenuItem Header="标记(?)"/>
         <Separator/>
         <MenuItem Header="扫雷英雄榜"/>
         <Separator/>
@@ -139,7 +139,11 @@
                         <Image.Style>
                           <Style TargetType="Image">
                             <Style.Triggers>
-                              <DataTrigger Binding="{Binding IsFlaged}" Value="True">
+                              <DataTrigger Binding="{Binding CellMark}" Value="{x:Static model:CellMark.Flag}">
+                                <Setter Property="Visibility" Value="Visible"/>
+                              </DataTrigger>
+
+                              <DataTrigger Binding="{Binding CellMark}" Value="{x:Static model:CellMark.Mark}">
                                 <Setter Property="Visibility" Value="Visible"/>
                               </DataTrigger>
 
@@ -153,7 +157,7 @@
 
                               <MultiDataTrigger>
                                 <MultiDataTrigger.Conditions>
-                                  <Condition Binding="{Binding IsFlaged}" Value="False"/>
+                                  <Condition Binding="{Binding CellMark}" Value="{x:Static model:CellMark.None}"/>
                                   <Condition Binding="{Binding DataContext.GameOver,ElementName=me}" Value="False"/>
                                 </MultiDataTrigger.Conditions>
                                 <Setter Property="Visibility" Value="Hidden"/>
@@ -163,7 +167,7 @@
                         </Image.Style>
                         <Image.Source>
                           <MultiBinding Converter="{x:Static converter:CellShowImageConverter.Instance}">
-                            <Binding Path="IsFlaged"/>
+                            <Binding Path="CellMark"/>
                             <Binding Path="IsBomb"/>
                           </MultiBinding>
                         </Image.Source>
@@ -187,7 +191,7 @@
                     <MultiDataTrigger>
                       <MultiDataTrigger.Conditions>
                         <Condition Binding="{Binding Pressed}" Value="True"/>
-                        <Condition Binding="{Binding IsFlaged}" Value="False"/>
+                        <Condition Binding="{Binding CellMark,Converter={x:Static converter:CellMarkNotFlagConvert.Instance}}" Value="True"/>
                       </MultiDataTrigger.Conditions>
                       <Setter Property="Fill" TargetName="leftThickness" Value="#808080"/>
                       <Setter Property="Fill" TargetName="topThickness" Value="#808080"/>
@@ -202,7 +206,7 @@
                       <MultiDataTrigger.Conditions>
                         <Condition Binding="{Binding Flag,Converter={x:Static converter:EnumFlagConverter.Instance},ConverterParameter={x:Static model:CellFlag.Left}}"
                                Value="True"/>
-                        <Condition Binding="{Binding IsFlaged}" Value="False"/>
+                        <Condition Binding="{Binding CellMark,Converter={x:Static converter:CellMarkNotFlagConvert.Instance}}" Value="True"/>
                       </MultiDataTrigger.Conditions>
                       <Setter Property="Fill" TargetName="leftThickness" Value="#808080"/>
                     </MultiDataTrigger>
@@ -211,7 +215,7 @@
                       <MultiDataTrigger.Conditions>
                         <Condition Binding="{Binding Flag,Converter={x:Static converter:EnumFlagConverter.Instance},ConverterParameter={x:Static model:CellFlag.Top}}"
                                Value="True"/>
-                        <Condition Binding="{Binding IsFlaged}" Value="False"/>
+                        <Condition Binding="{Binding CellMark,Converter={x:Static converter:CellMarkNotFlagConvert.Instance}}" Value="True"/>
                       </MultiDataTrigger.Conditions>
                       <Setter Property="Fill" TargetName="leftThickness" Value="#808080"/>
                     </MultiDataTrigger>
@@ -220,7 +224,7 @@
                       <MultiDataTrigger.Conditions>
                         <Condition Binding="{Binding Flag,Converter={x:Static converter:EnumFlagConverter.Instance},ConverterParameter={x:Static model:CellFlag.Right}}"
                                Value="True"/>
-                        <Condition Binding="{Binding IsFlaged}" Value="False"/>
+                        <Condition Binding="{Binding CellMark,Converter={x:Static converter:CellMarkNotFlagConvert.Instance}}" Value="True"/>
                       </MultiDataTrigger.Conditions>
                       <Setter Property="Fill" TargetName="leftThickness" Value="#808080"/>
                     </MultiDataTrigger>
@@ -229,7 +233,7 @@
                       <MultiDataTrigger.Conditions>
                         <Condition Binding="{Binding Flag,Converter={x:Static converter:EnumFlagConverter.Instance},ConverterParameter={x:Static model:CellFlag.Bottom}}"
                                Value="True"/>
-                        <Condition Binding="{Binding IsFlaged}" Value="False"/>
+                        <Condition Binding="{Binding CellMark,Converter={x:Static converter:CellMarkNotFlagConvert.Instance}}" Value="True"/>
                       </MultiDataTrigger.Conditions>
                       <Setter Property="Fill" TargetName="leftThickness" Value="#808080"/>
                     </MultiDataTrigger>

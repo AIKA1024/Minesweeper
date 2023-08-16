@@ -19,10 +19,10 @@ using System.Windows.Shapes;
 
 namespace Minesweeper
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow : Window
+  /// <summary>
+  /// Interaction logic for MainWindow.xaml
+  /// </summary>
+  public partial class MainWindow : Window
   {
     GameInfo gameInfo;
     MouseButtonState leftButton = MouseButtonState.Released;
@@ -139,7 +139,7 @@ namespace Minesweeper
       else
       {
         Cell cell = (Cell)listBox.SelectedItem;
-        if (cell.IsFlaged == true) return;
+        if (cell.CellMark == CellMark.Flag) return;
         cell.Flag = CellFlag.Left | CellFlag.Right | CellFlag.Top | CellFlag.Bottom;
         cell.Pressed = true;
         lastPressList.Add((Cell)listBox.SelectedItem);
@@ -149,13 +149,13 @@ namespace Minesweeper
     {
       Cell SelectCell = (Cell)listBox.SelectedItem;
       var aroundCell = GetAroundValidCell(SelectCell);
-      if (SelectCell.AroundBombNum != aroundCell.Where(c=>c.IsFlaged).Count())
+      if (SelectCell.AroundBombNum != aroundCell.Where(c => c.CellMark == CellMark.Flag).Count())
         return;
 
       foreach (var cell in aroundCell)
       {
 
-        if (cell.IsFlaged||cell.IsOpened)
+        if (cell.CellMark == CellMark.Flag || cell.IsOpened)
           continue;
 
         if (cell.IsBomb)
@@ -163,11 +163,11 @@ namespace Minesweeper
           cell.Explode = true;
           GameOver();
         }
-        if (cell.IsFlaged)
+        if (cell.CellMark == CellMark.Flag)
           return;
 
         cell.IsOpened = true;
-        cell.IsFlaged = false;
+        cell.CellMark = CellMark.None;
         cell.Flag = CellFlag.None;
       }
     }
@@ -253,13 +253,13 @@ namespace Minesweeper
         ClickedCell.Explode = true;
         GameOver();
       }
-      if (ClickedCell.IsFlaged)
+      if (ClickedCell.CellMark == CellMark.Flag)
         return;
 
       ClickedCell.IsOpened = true;
-      ClickedCell.IsFlaged = false;
+      ClickedCell.CellMark = CellMark.None;
       ClickedCell.Flag = CellFlag.None;
-      if (ClickedCell.IsBomb||ClickedCell.AroundBombNum>0)
+      if (ClickedCell.IsBomb || ClickedCell.AroundBombNum > 0)
         return;
       var UDLRCellList = GetAroundValidCell(ClickedCell);
       foreach (var cell in UDLRCellList)
@@ -284,7 +284,7 @@ namespace Minesweeper
       gameInfo.GameOver = true;
       foreach (var cell in gameInfo.BombList)
       {
-        if (!cell.IsFlaged)
+        if (cell.CellMark != CellMark.Flag)
           cell.IsOpened = true;
       }
     }
@@ -331,7 +331,23 @@ namespace Minesweeper
       if (leftButton == MouseButtonState.Released && rightButton == MouseButtonState.Pressed &&
          cell != null && !cell.IsOpened)
       {
-        cell.IsFlaged = !cell.IsFlaged;
+        switch (cell.CellMark)
+        {
+          case CellMark.None:
+            cell.CellMark = CellMark.Flag;
+            break;
+          case CellMark.Flag:
+            if (gameInfo.useMark)
+              cell.CellMark = CellMark.Mark;
+            else
+              cell.CellMark = CellMark.None;
+            break;
+          case CellMark.Mark:
+            cell.CellMark = CellMark.None;
+            break;
+          default:
+            break;
+        }
         return;
       }
       foreach (var item in e.RemovedItems)
