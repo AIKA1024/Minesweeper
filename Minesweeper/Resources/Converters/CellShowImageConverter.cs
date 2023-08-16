@@ -19,22 +19,31 @@ namespace Minesweeper.Resources.Converters
     {
       var cellmark = (CellMark)values[0];
       bool isBomb = (bool)values[1];
+      bool gameOver = (bool)values[2];
       var image = new BitmapImage();
       image.BeginInit();
-      if (cellmark == CellMark.Flag)
+      if (gameOver && !isBomb && cellmark == CellMark.Flag)
       {
-        image.UriSource = new Uri("./Resources/Pictures/Flag.png", UriKind.RelativeOrAbsolute);
+        image.UriSource = new Uri("./Resources/Pictures/MistakeFlag.png", UriKind.RelativeOrAbsolute);
         image.EndInit();
       }
-      else if (cellmark == CellMark.Mark)
+      else
       {
-        image.UriSource = new Uri("./Resources/Pictures/QuestionMark.png", UriKind.RelativeOrAbsolute);
-        image.EndInit();
-      }
-      else if (isBomb)
-      {
-        image.UriSource = new Uri("./Resources/Pictures/Bomb.png", UriKind.RelativeOrAbsolute);
-        image.EndInit();
+        if (cellmark == CellMark.Flag)
+        {
+          image.UriSource = new Uri("./Resources/Pictures/Flag.png", UriKind.RelativeOrAbsolute);
+          image.EndInit();
+        }
+        else if (cellmark == CellMark.Mark)
+        {
+          image.UriSource = new Uri("./Resources/Pictures/QuestionMark.png", UriKind.RelativeOrAbsolute);
+          image.EndInit();
+        }
+        else if (isBomb)
+        {
+          image.UriSource = new Uri("./Resources/Pictures/Bomb.png", UriKind.RelativeOrAbsolute);
+          image.EndInit();
+        }
       }
       return image;
     }

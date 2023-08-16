@@ -8,13 +8,39 @@ using System.Threading.Tasks;
 
 namespace Minesweeper.Models
 {
-    public class GameInfo : INotifyPropertyChanged
+  public class GameInfo : INotifyPropertyChanged
   {
     public event PropertyChangedEventHandler? PropertyChanged;
-
-    public int row = 16;
-    public int column = 30;
-    public int bombCount = 10;
+    private int row = 16;
+    public int Row
+    {
+      get { return row; }
+      set 
+      { 
+        row = value; 
+        PropertyChanged?.Invoke(this,new PropertyChangedEventArgs(nameof(Row)));
+      }
+    }
+    private int column = 30;
+    public int Column
+    {
+      get { return column; }
+      set
+      {
+        column = value;
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Column)));
+      }
+    }
+    private int bombCount = 30;
+    public int BombCount
+    {
+      get { return bombCount; }
+      set
+      {
+        bombCount = value;
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(BombCount)));
+      }
+    }
     public int maxCell = 480;
     public bool useMark = true;
     public bool started = false;
@@ -23,8 +49,8 @@ namespace Minesweeper.Models
     public bool GameOver
     {
       get { return gameOver; }
-      set 
-      { 
+      set
+      {
         gameOver = value;
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(GameOver)));
       }

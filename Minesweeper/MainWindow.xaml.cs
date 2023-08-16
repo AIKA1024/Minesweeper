@@ -1,5 +1,6 @@
 ﻿using Minesweeper.Class;
 using Minesweeper.Models;
+using Minesweeper.Windows;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -40,7 +41,7 @@ namespace Minesweeper
       ReCalculateOffset();
       DataContext = gameInfo;
     }
-    private void InitGame()
+    public void InitGame()
     {
       if (!gameInfo.started)
         return;
@@ -59,7 +60,7 @@ namespace Minesweeper
       Cell SeleCell = (Cell)listBox.SelectedItem;
       gameInfo.BombList.Clear();
       //布雷
-      for (int i = 0; i < gameInfo.bombCount; i++)
+      for (int i = 0; i < gameInfo.BombCount; i++)
       {
         int bombIndex = Random.Shared.Next(0, gameInfo.maxCell);
         while (bombIndex == SeleCell.Index || gameInfo.CellList[bombIndex].IsBomb == true)
@@ -71,14 +72,14 @@ namespace Minesweeper
       //计算周围雷数
       foreach (var bombCell in gameInfo.BombList)
       {
-        foreach (var cell in GetAroundCell(bombCell))
+        foreach (var cell in GetAroundValidCell(bombCell))
         {
-          if (cell == null || cell.IsBomb == true || cell.AroundBombNum != 0)
+          if (cell.IsBomb == true || cell.AroundBombNum != 0)
             continue;
 
-          foreach (var item in GetAroundCell(cell))
+          foreach (var item in GetAroundValidCell(cell))
           {
-            if (item?.IsBomb == true)
+            if (item.IsBomb == true)
               cell.AroundBombNum++;
           }
         }
@@ -88,17 +89,17 @@ namespace Minesweeper
     {
       gameInfo.OffsetList.Clear();
       ///九宫格的偏移位置
-      gameInfo.OffsetList.Add(-gameInfo.column - 1);
-      gameInfo.OffsetList.Add(-gameInfo.column);
-      gameInfo.OffsetList.Add(-gameInfo.column + 1);
+      gameInfo.OffsetList.Add(-gameInfo.Column - 1);
+      gameInfo.OffsetList.Add(-gameInfo.Column);
+      gameInfo.OffsetList.Add(-gameInfo.Column + 1);
 
       gameInfo.OffsetList.Add(-1);
       gameInfo.OffsetList.Add(0);
       gameInfo.OffsetList.Add(1);
 
-      gameInfo.OffsetList.Add(gameInfo.column - 1);
-      gameInfo.OffsetList.Add(gameInfo.column);
-      gameInfo.OffsetList.Add(gameInfo.column + 1);
+      gameInfo.OffsetList.Add(gameInfo.Column - 1);
+      gameInfo.OffsetList.Add(gameInfo.Column);
+      gameInfo.OffsetList.Add(gameInfo.Column + 1);
     }
 
     private void UpdatePressCell()
@@ -194,7 +195,7 @@ namespace Minesweeper
         int offset = index + gameInfo.OffsetList[i];
         int offsetRow = i / 3;
         if (offset >= 0 && offset < gameInfo.maxCell &&
-          offset / gameInfo.column == (int)Math.Floor(((float)gameInfo.OffsetList[offsetRow * 3 + 1] + index) / gameInfo.column))//格子位置在最小、最大值范围内，并且九宫格有三行，该偏移量的位置和该行中间的偏移量对列数的商相等，说明没有换行
+          offset / gameInfo.Column == (int)Math.Floor(((float)gameInfo.OffsetList[offsetRow * 3 + 1] + index) / gameInfo.Column))//格子位置在最小、最大值范围内，并且九宫格有三行，该偏移量的位置和该行中间的偏移量对列数的商相等，说明没有换行
         {
           result.Add(gameInfo.CellList[offset]);
         }
@@ -209,8 +210,8 @@ namespace Minesweeper
     private List<Cell> GetAroundValidCell(Cell cell)
     {
       int index = gameInfo.CellList.IndexOf(cell);
-      int inRow = index / gameInfo.row;
-      int inColumn = index % gameInfo.column;
+      int inRow = index / gameInfo.Row;
+      int inColumn = index % gameInfo.Column;
       var result = new List<Cell>();
 
       for (int i = 0; i < gameInfo.OffsetList.Count; i++)
@@ -218,7 +219,7 @@ namespace Minesweeper
         int offset = index + gameInfo.OffsetList[i];
         int offsetRow = i / 3;
         if (offset >= 0 && offset < gameInfo.maxCell &&
-          offset / gameInfo.column == (int)Math.Floor(((float)gameInfo.OffsetList[offsetRow * 3 + 1] + index) / gameInfo.column))//格子位置在最小、最大值范围内，并且九宫格有三行，该偏移量的位置和该行中间的偏移量对列数的商相等，说明没有换行
+          offset / gameInfo.Column == (int)Math.Floor(((float)gameInfo.OffsetList[offsetRow * 3 + 1] + index) / gameInfo.Column))//格子位置在最小、最大值范围内，并且九宫格有三行，该偏移量的位置和该行中间的偏移量对列数的商相等，说明没有换行
         {
           result.Add(gameInfo.CellList[offset]);
         }
@@ -234,8 +235,8 @@ namespace Minesweeper
     private List<Cell?> GetAroundCell(Cell cell)
     {
       int index = gameInfo.CellList.IndexOf(cell);
-      int inRow = index / gameInfo.row;
-      int inColumn = index % gameInfo.column;
+      int inRow = index / gameInfo.Row;
+      int inColumn = index % gameInfo.Column;
       var result = new List<Cell?>();
 
       for (int i = 0; i < gameInfo.OffsetList.Count; i++)
@@ -243,7 +244,7 @@ namespace Minesweeper
         int offset = index + gameInfo.OffsetList[i];
         int offsetRow = i / 3;
         if (offset >= 0 && offset < gameInfo.maxCell &&
-          offset / gameInfo.column == (int)Math.Floor(((float)gameInfo.OffsetList[offsetRow * 3 + 1] + index) / gameInfo.column))//格子位置在最小、最大值范围内，并且九宫格有三行，该偏移量的位置和该行中间的偏移量对列数的商相等，说明没有换行
+          offset / gameInfo.Column == (int)Math.Floor(((float)gameInfo.OffsetList[offsetRow * 3 + 1] + index) / gameInfo.Column))//格子位置在最小、最大值范围内，并且九宫格有三行，该偏移量的位置和该行中间的偏移量对列数的商相等，说明没有换行
         {
           result.Add(gameInfo.CellList[offset]);
         }
@@ -275,13 +276,12 @@ namespace Minesweeper
       var AroundValidCellList = GetAroundValidCell(ClickedCell);
       foreach (var cell in AroundValidCellList)
       {
-        if (cell.IsOpened)
+        if (cell.IsOpened || cell.CellMark == CellMark.Flag || cell.IsBomb)
           continue;
-
-        if (!cell.IsBomb)
+        else
         {
           cell.IsOpened = true;
-          if (cell.AroundBombNum == 0 || ClickedCell.AroundBombNum == 0)
+          if (cell.AroundBombNum == 0)
             OpenCell(cell);
         }
       }
@@ -289,7 +289,7 @@ namespace Minesweeper
     private void CheckGameWin(Cell cell)
     {
       openCellList.Add(cell);
-      if (openCellList.Count == gameInfo.maxCell - gameInfo.bombCount)
+      if (openCellList.Count == gameInfo.maxCell - gameInfo.BombCount)
         GameOver();
     }
     private void GameOver()
@@ -386,6 +386,12 @@ namespace Minesweeper
     {
       if (gameInfo.GameOver)
         e.Handled = true;
+    }
+
+    private void CustomMenuItem_Click(object sender, RoutedEventArgs e)
+    {
+      CustomGameWindow customGameWindow = new CustomGameWindow(this) { DataContext = gameInfo };
+      customGameWindow.ShowDialog();
     }
   }
 }

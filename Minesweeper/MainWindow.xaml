@@ -21,7 +21,7 @@
         <MenuItem Header="初级"/>
         <MenuItem Header="中级"/>
         <MenuItem Header="高级"/>
-        <MenuItem Header="自定义"/>
+        <MenuItem Header="自定义" Click="CustomMenuItem_Click"/>
         <Separator/>
         <MenuItem Header="标记(?)"/>
         <Separator/>
@@ -47,7 +47,7 @@
 
         <Grid Margin="8">
           <TextBlock Height="26" Width="40" FontSize="22" TextAlignment="Center" FontFamily="{StaticResource LCD}"
-                 Background="Black" Foreground="Red" HorizontalAlignment="Left" Text="000"/>
+                 Background="Black" Foreground="Red" HorizontalAlignment="Left" Text="{Binding BombCount}"/>
           <Button HorizontalAlignment="Center" Width="40" Click="Button_Click"/>
           <TextBlock Height="26" Width="40" FontSize="22" TextAlignment="Center" FontFamily="{StaticResource LCD}"
                  Background="Black" Foreground="Red" HorizontalAlignment="Right" Text="000"/>
@@ -170,6 +170,7 @@
                           <MultiBinding Converter="{x:Static converter:CellShowImageConverter.Instance}">
                             <Binding Path="CellMark"/>
                             <Binding Path="IsBomb"/>
+                            <Binding Path="DataContext.GameOver" ElementName="me"/>
                           </MultiBinding>
                         </Image.Source>
                       </Image>
