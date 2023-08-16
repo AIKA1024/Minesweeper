@@ -28,7 +28,7 @@ namespace Minesweeper
     MouseButtonState leftButton = MouseButtonState.Released;
     MouseButtonState rightButton = MouseButtonState.Released;
     readonly List<Cell?> lastPressList = new List<Cell?>();
-
+    readonly List<Cell> openCellList = new List<Cell>(10);
     public MainWindow()
     {
       InitializeComponent();
@@ -148,6 +148,8 @@ namespace Minesweeper
     private void OpenAroundCellBYFlag()
     {
       Cell SelectCell = (Cell)listBox.SelectedItem;
+      if (SelectCell == null)
+        return;
       var aroundCell = GetAroundValidCell(SelectCell);
       if (SelectCell.AroundBombNum != aroundCell.Where(c => c.CellMark == CellMark.Flag).Count())
         return;
@@ -162,13 +164,20 @@ namespace Minesweeper
         {
           cell.Explode = true;
           GameOver();
+          return;
         }
         if (cell.CellMark == CellMark.Flag)
           return;
 
-        cell.IsOpened = true;
-        cell.CellMark = CellMark.None;
-        cell.Flag = CellFlag.None;
+        if (cell.AroundBombNum == 0)
+          OpenCell(cell);
+        else
+        {
+          cell.IsOpened = true;
+          cell.CellMark = CellMark.None;
+          cell.Flag = CellFlag.None;
+          CheckGameWin(cell);
+        }
       }
     }
     /// <summary>
@@ -252,6 +261,7 @@ namespace Minesweeper
       {
         ClickedCell.Explode = true;
         GameOver();
+        return;
       }
       if (ClickedCell.CellMark == CellMark.Flag)
         return;
@@ -259,10 +269,11 @@ namespace Minesweeper
       ClickedCell.IsOpened = true;
       ClickedCell.CellMark = CellMark.None;
       ClickedCell.Flag = CellFlag.None;
+      CheckGameWin(ClickedCell);
       if (ClickedCell.IsBomb || ClickedCell.AroundBombNum > 0)
         return;
-      var UDLRCellList = GetAroundValidCell(ClickedCell);
-      foreach (var cell in UDLRCellList)
+      var AroundValidCellList = GetAroundValidCell(ClickedCell);
+      foreach (var cell in AroundValidCellList)
       {
         if (cell.IsOpened)
           continue;
@@ -275,13 +286,19 @@ namespace Minesweeper
         }
       }
     }
-
+    private void CheckGameWin(Cell cell)
+    {
+      openCellList.Add(cell);
+      if (openCellList.Count == gameInfo.maxCell - gameInfo.bombCount)
+        GameOver();
+    }
     private void GameOver()
     {
       if (gameInfo.GameOver)
         return;
 
       gameInfo.GameOver = true;
+      openCellList.Clear();
       foreach (var cell in gameInfo.BombList)
       {
         if (cell.CellMark != CellMark.Flag)

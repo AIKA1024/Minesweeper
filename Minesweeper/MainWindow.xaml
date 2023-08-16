@@ -7,7 +7,7 @@
         xmlns:converter="clr-namespace:Minesweeper.Resources.Converters"
         xmlns:local="clr-namespace:Minesweeper"
         mc:Ignorable="d"
-        Title="扫雷" Height="449" Width="611" WindowStartupLocation="CenterScreen">
+        Title="扫雷" Height="447" Width="611" WindowStartupLocation="CenterScreen">
   <Window.Resources>
     <BooleanToVisibilityConverter x:Key="BoolToVisConverter" />
   </Window.Resources>
@@ -54,15 +54,16 @@
         </Grid>
 
       </Grid>
-      <ListBox Grid.Row="1" MouseLeave="listBox_MouseLeave" Margin="8" Padding="0" x:Name="listBox" ItemsSource="{Binding CellList}"
+      <ListBox Grid.Row="1" MouseLeave="listBox_MouseLeave" Margin="8" x:Name="listBox" ItemsSource="{Binding CellList}"
              ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled"
-             SelectionChanged="listBox_SelectionChanged" PreviewMouseDown="listBox_PreviewMouseDown">
+             SelectionChanged="listBox_SelectionChanged" PreviewMouseDown="listBox_PreviewMouseDown"
+             BorderThickness="0">
         <ListBox.Template>
           <ControlTemplate>
             <Grid>
               <ItemsPresenter Margin="3"/>
               <Rectangle x:Name="leftThickness" Fill="#808080" Width="3" VerticalAlignment="stretch" HorizontalAlignment="Left"/>
-              <Rectangle x:Name="topThickness" Fill="#808080" Height="3" VerticalAlignment="Top" HorizontalAlignment="stretch"/>
+              <Rectangle x:Name="topThickness" Fill="#808080" Height="3.5" VerticalAlignment="Top" HorizontalAlignment="stretch"/>
               <Rectangle x:Name="rightThickness" Fill="#ffffff" Width="3" VerticalAlignment="stretch" HorizontalAlignment="Right"/>
               <Rectangle x:Name="buttomThickness" Fill="#ffffff" Height="3" VerticalAlignment="Bottom" HorizontalAlignment="stretch"/>
             </Grid>
