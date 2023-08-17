@@ -47,7 +47,7 @@
 
         <Grid Margin="8">
           <TextBlock Height="26" Width="40" FontSize="22" TextAlignment="Center" FontFamily="{StaticResource LCD}"
-                 Background="Black" Foreground="Red" HorizontalAlignment="Left" Text="{Binding BombCount}"/>
+                 Background="Black" Foreground="Red" HorizontalAlignment="Left" Text="{Binding BombCount,StringFormat={}{0:D3}}"/>
           <Button HorizontalAlignment="Center" Width="40" Click="Button_Click"/>
           <TextBlock Height="26" Width="40" FontSize="22" TextAlignment="Center" FontFamily="{StaticResource LCD}"
                  Background="Black" Foreground="Red" HorizontalAlignment="Right" Text="000"/>
@@ -85,8 +85,6 @@
                     <Border x:Name="Border" Background="#c0c0c0">
                       <ContentPresenter/>
                     </Border>
-
-
                   </Grid>
 
                   <ControlTemplate.Triggers>
@@ -134,7 +132,7 @@
                   <Grid>
                     <Grid Margin="3" VerticalAlignment="Center" HorizontalAlignment="Center" Height="13" Width="13">
                       <TextBlock Text="{Binding AroundBombNum}"
-                         FontFamily="MoolBoran" FontWeight="Black" FontSize="14" TextAlignment="Center"
+                         FontFamily="MoolBoran" FontWeight="UltraBold"  FontSize="14" TextAlignment="Center"
                          Visibility="{Binding IsOpened,Converter={StaticResource BoolToVisConverter}}"/>
                       <Image RenderOptions.BitmapScalingMode="NearestNeighbor">
                         <Image.Style>
