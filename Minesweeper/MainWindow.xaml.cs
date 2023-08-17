@@ -248,11 +248,13 @@ namespace Minesweeper
       }
       if (ClickedCell.CellMark == CellMark.Flag)
         return;
-
-      ClickedCell.IsOpened = true;
-      ClickedCell.CellMark = CellMark.None;
-      ClickedCell.Flag = CellFlag.None;
-      CheckGameWin(ClickedCell);
+      if (!ClickedCell.IsOpened)
+      {
+        ClickedCell.IsOpened = true;
+        ClickedCell.CellMark = CellMark.None;
+        ClickedCell.Flag = CellFlag.None;
+        CheckGameWin(ClickedCell);
+      }
       if (ClickedCell.IsBomb || ClickedCell.AroundBombNum > 0)
         return;
       var AroundValidCellList = GetAroundValidCell(ClickedCell);
@@ -263,6 +265,7 @@ namespace Minesweeper
         else
         {
           cell.IsOpened = true;
+          CheckGameWin(ClickedCell);
           if (cell.AroundBombNum == 0)
             OpenCell(cell);
         }
