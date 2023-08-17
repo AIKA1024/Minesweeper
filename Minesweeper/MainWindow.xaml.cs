@@ -364,12 +364,6 @@ namespace Minesweeper
       }
     }
 
-    private void listBox_PreviewMouseDown(object sender, MouseButtonEventArgs e)
-    {
-      if (gameInfo.GameOver)
-        e.Handled = true;
-    }
-
     private void CustomMenuItem_Click(object sender, RoutedEventArgs e)
     {
       CustomGameWindow customGameWindow = new CustomGameWindow(this) { DataContext = gameInfo };

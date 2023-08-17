@@ -56,7 +56,7 @@
       </Grid>
       <ListBox Grid.Row="1" MouseLeave="listBox_MouseLeave" Margin="8" x:Name="listBox" ItemsSource="{Binding CellList}"
              ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled"
-             SelectionChanged="listBox_SelectionChanged" PreviewMouseDown="listBox_PreviewMouseDown"
+             SelectionChanged="listBox_SelectionChanged" IsEnabled="{Binding GameOver,Converter={x:Static converter:InverseBoolConvert.Instance}}"
              BorderThickness="0">
         <ListBox.Template>
           <ControlTemplate>
@@ -230,7 +230,7 @@
                       </MultiDataTrigger.Conditions>
                       <Setter Property="Fill" TargetName="leftThickness" Value="#808080"/>
                     </MultiDataTrigger>
-                    
+
                     <MultiDataTrigger>
                       <MultiDataTrigger.Conditions>
                         <Condition Binding="{Binding Flag,Converter={x:Static converter:EnumFlagConverter.Instance},ConverterParameter={x:Static model:CellFlag.Bottom}}"
