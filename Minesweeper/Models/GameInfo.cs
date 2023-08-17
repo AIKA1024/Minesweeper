@@ -54,11 +54,10 @@ namespace Minesweeper.Models
     public readonly List<int> OffsetList = new List<int>(9);
     public readonly List<Cell> BombList = new List<Cell>(10);
     public ObservableCollection<Cell> CellList { get; set; }
-      = new ObservableCollection<Cell>(new List<Cell>(480));
 
     public GameInfo()
     {
-
+      CellList = new ObservableCollection<Cell>(new List<Cell>(Row * Column));
     }
   }
 }
