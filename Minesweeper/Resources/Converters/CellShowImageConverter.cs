@@ -8,41 +8,55 @@ namespace Minesweeper.Resources.Converters
 {
   internal class CellShowImageConverter : IMultiValueConverter
   {
+    private readonly BitmapImage MistakeFlag = new();
+    private readonly BitmapImage Flag = new();
+    private readonly BitmapImage QuestionMark = new();
+    private readonly BitmapImage Bomb = new();
     public static CellShowImageConverter Instance = new CellShowImageConverter();
+    public CellShowImageConverter()
+    {
+      MistakeFlag.BeginInit();
+      MistakeFlag.UriSource = new Uri("./Resources/Pictures/MistakeFlag.png", UriKind.RelativeOrAbsolute);
+      MistakeFlag.EndInit();
 
+      Flag.BeginInit();
+      Flag.UriSource = new Uri("./Resources/Pictures/Flag.png", UriKind.RelativeOrAbsolute);
+      Flag.EndInit();
+
+      QuestionMark.BeginInit();
+      QuestionMark.UriSource = new Uri("./Resources/Pictures/QuestionMark.png", UriKind.RelativeOrAbsolute);
+      QuestionMark.EndInit();
+
+      Bomb.BeginInit();
+      Bomb.UriSource = new Uri("./Resources/Pictures/Bomb.png", UriKind.RelativeOrAbsolute);
+      Bomb.EndInit();
+    }
     public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
     {
       var cellmark = (CellMark)values[0];
       bool isBomb = (bool)values[1];
       bool gameOver = (bool)values[2];
-      var image = new BitmapImage();
-      image.BeginInit();
       if (gameOver && !isBomb && cellmark == CellMark.Flag)
       {
-        image.UriSource = new Uri("./Resources/Pictures/MistakeFlag.png", UriKind.RelativeOrAbsolute);
-        image.EndInit();
+        return MistakeFlag;
       }
       else
       {
         if (cellmark == CellMark.Flag)
         {
-          image.UriSource = new Uri("./Resources/Pictures/Flag.png", UriKind.RelativeOrAbsolute);
-          image.EndInit();
+          return Flag;
         }
-        else if (cellmark == CellMark.Mark)
+        else if (cellmark == CellMark.QuestionMark)
         {
-          image.UriSource = new Uri("./Resources/Pictures/QuestionMark.png", UriKind.RelativeOrAbsolute);
-          image.EndInit();
+          return QuestionMark;
         }
         else if (isBomb)
         {
-          image.UriSource = new Uri("./Resources/Pictures/Bomb.png", UriKind.RelativeOrAbsolute);
-          image.EndInit();
+          return Bomb;
         }
       }
-      return image;
+      return null;
     }
-
     public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
     {
       throw new NotImplementedException();

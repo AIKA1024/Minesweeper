@@ -17,7 +17,7 @@ namespace Minesweeper.Models
   {
     None = 0,
     Flag = 1,
-    Mark = 2
+    QuestionMark = 2
   }
   public class Cell : INotifyPropertyChanged
   {

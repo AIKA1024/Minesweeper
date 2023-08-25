@@ -7,7 +7,8 @@
         xmlns:converter="clr-namespace:Minesweeper.Resources.Converters"
         xmlns:local="clr-namespace:Minesweeper"
         mc:Ignorable="d"
-        Title="扫雷" Height="447" Width="611" WindowStartupLocation="CenterScreen">
+        Title="扫雷" Height="447" Width="611" WindowStartupLocation="CenterScreen"
+        PreviewMouseDown="me_PreviewMouseDown" PreviewMouseUp="me_PreviewMouseUp">
   <Window.Resources>
     <BooleanToVisibilityConverter x:Key="BoolToVisConverter" />
   </Window.Resources>
@@ -40,15 +41,47 @@
         <RowDefinition/>
       </Grid.RowDefinitions>
       <Grid Background="#c0c0c0" Margin="8" Grid.Row="0">
-        <Rectangle x:Name="leftThickness" Fill="#808080" Width="2" VerticalAlignment="stretch" HorizontalAlignment="Left"/>
-        <Rectangle x:Name="topThickness" Fill="#808080" Height="2" VerticalAlignment="Top" HorizontalAlignment="stretch"/>
-        <Rectangle x:Name="rightThickness" Fill="#ffffff" Width="2" VerticalAlignment="stretch" HorizontalAlignment="Right"/>
-        <Rectangle x:Name="buttomThickness" Fill="#ffffff" Height="2" VerticalAlignment="Bottom" HorizontalAlignment="stretch"/>
+        <Rectangle Fill="#808080" Width="2" VerticalAlignment="stretch" HorizontalAlignment="Left"/>
+        <Rectangle Fill="#808080" Height="2" VerticalAlignment="Top" HorizontalAlignment="stretch"/>
+        <Rectangle Fill="#ffffff" Width="2" VerticalAlignment="stretch" HorizontalAlignment="Right"/>
+        <Rectangle Fill="#ffffff" Height="2" VerticalAlignment="Bottom" HorizontalAlignment="stretch"/>
 
         <Grid Margin="8">
           <TextBlock Height="26" Width="40" FontSize="22" TextAlignment="Center" FontFamily="{StaticResource LCD}"
                  Background="Black" Foreground="Red" HorizontalAlignment="Left" Text="{Binding BombCount,StringFormat={}{0:D3}}"/>
-          <Button HorizontalAlignment="Center" Width="40" Click="Button_Click"/>
+          <Button x:Name="faceButton" HorizontalAlignment="Center" Width="28" Height="28" Click="Button_Click" Padding="0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+            <Button.Style>
+              <Style TargetType="Button">
+                <Setter Property="Template">
+                  <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                      <Border BorderThickness="1" BorderBrush="#808080" CornerRadius="2">
+                        <Grid>
+                          <Rectangle x:Name="leftThickness" Fill="#ffffff" Width="2" VerticalAlignment="stretch" HorizontalAlignment="Left"/>
+                          <Rectangle x:Name="topThickness" Fill="#ffffff" Height="2" VerticalAlignment="Top" HorizontalAlignment="stretch"/>
+                          <Rectangle x:Name="rightThickness"  Fill="#808080" Width="2" VerticalAlignment="stretch" HorizontalAlignment="Right"/>
+                          <Rectangle x:Name="buttomThickness" Fill="#808080" Height="2" VerticalAlignment="Bottom" HorizontalAlignment="stretch"/>
+
+                          <Image x:Name="image" Width="20" RenderOptions.BitmapScalingMode="NearestNeighbor" HorizontalAlignment="Center" VerticalAlignment="Center"
+                            Source="{Binding DataContext.CurrFaceStatus,ElementName=me,Converter={x:Static converter:FaceStatusToImageConverter.Instance}}"/>
+                        </Grid>
+                      </Border>
+
+                      <ControlTemplate.Triggers>
+                        <Trigger Property="IsPressed" Value="True">
+                          <Setter TargetName="leftThickness" Property="Fill" Value="#808080"/>
+                          <Setter TargetName="topThickness" Property="Fill" Value="#808080"/>
+                          <Setter TargetName="rightThickness" Property="Width" Value="0"/>
+                          <Setter TargetName="buttomThickness" Property="Height" Value="0"/>
+                          <Setter TargetName="image" Property="Margin" Value="2 2 0 0"/>
+                        </Trigger>
+                      </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                  </Setter.Value>
+                </Setter>
+              </Style>
+            </Button.Style>
+          </Button>
           <TextBlock Height="26" Width="40" FontSize="22" TextAlignment="Center" FontFamily="{StaticResource LCD}"
                  Background="Black" Foreground="Red" HorizontalAlignment="Right" Text="000"/>
         </Grid>
@@ -142,7 +175,7 @@
                                 <Setter Property="Visibility" Value="Visible"/>
                               </DataTrigger>
 
-                              <DataTrigger Binding="{Binding CellMark}" Value="{x:Static model:CellMark.Mark}">
+                              <DataTrigger Binding="{Binding CellMark}" Value="{x:Static model:CellMark.QuestionMark}">
                                 <Setter Property="Visibility" Value="Visible"/>
                               </DataTrigger>
 

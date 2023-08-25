@@ -14,14 +14,20 @@
     <None Remove="Resources\Ico.ico" />
     <None Remove="Resources\LCD.ttf" />
     <None Remove="Resources\MistakeFlag.png" />
+    <None Remove="Resources\Pictures\ClickedFace.png" />
+    <None Remove="Resources\Pictures\DeadFace.png" />
+    <None Remove="Resources\Pictures\NormalFace.png" />
     <None Remove="Resources\Pictures\QuestionMark.png" />
     <None Remove="Resources\电子数字.ttf" />
   </ItemGroup>
 
   <ItemGroup>
     <Resource Include="Resources\Pictures\Bomb.png" />
+    <Resource Include="Resources\Pictures\ClickedFace.png" />
+    <Resource Include="Resources\Pictures\DeadFace.png" />
     <Resource Include="Resources\Pictures\Flag.png" />
     <Resource Include="Resources\Pictures\MistakeFlag.png" />
+    <Resource Include="Resources\Pictures\NormalFace.png" />
     <Resource Include="Resources\Pictures\QuestionMark.png" />
     <Resource Include="Resources\电子数字.ttf" />
   </ItemGroup>

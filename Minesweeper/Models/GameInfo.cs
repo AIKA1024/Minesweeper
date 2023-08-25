@@ -4,6 +4,12 @@ using System.ComponentModel;
 
 namespace Minesweeper.Models
 {
+  public enum FaceStatus
+  {
+    Normal,
+    Clicked,
+    Dead
+  }
   public class GameInfo : INotifyPropertyChanged
   {
     public event PropertyChangedEventHandler? PropertyChanged;
@@ -51,6 +57,22 @@ namespace Minesweeper.Models
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(GameOver)));
       }
     }
+
+    private FaceStatus faceStatus;
+
+    public FaceStatus CurrFaceStatus
+    {
+      get { return faceStatus; }
+      set 
+      {
+        if (faceStatus!= value)
+        {
+          faceStatus = value;
+          PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CurrFaceStatus)));
+        }
+      }
+    }
+
     public readonly List<int> OffsetList = new List<int>(9);
     public readonly List<Cell> BombList = new List<Cell>(10);
     public ObservableCollection<Cell> CellList { get; set; }

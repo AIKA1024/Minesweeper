@@ -35,7 +35,7 @@ namespace Minesweeper
     {
       if (!gameInfo.started)
         return;
-
+      gameInfo.CurrFaceStatus = FaceStatus.Normal;
       foreach (var cell in gameInfo.CellList)
       {
         cell.Init();
@@ -154,7 +154,7 @@ namespace Minesweeper
         if (cell.IsBomb)
         {
           cell.Explode = true;
-          GameOver();
+          GameOver(false);
           return;
         }
         if (cell.CellMark == CellMark.Flag)
@@ -243,7 +243,8 @@ namespace Minesweeper
       if (ClickedCell.IsBomb)
       {
         ClickedCell.Explode = true;
-        GameOver();
+        gameInfo.CurrFaceStatus = FaceStatus.Dead;
+        GameOver(false);
         return;
       }
       if (ClickedCell.CellMark == CellMark.Flag)
@@ -275,12 +276,15 @@ namespace Minesweeper
     {
       openCellList.Add(cell);
       if (openCellList.Count == gameInfo.maxCell - gameInfo.BombCount)
-        GameOver();
+        GameOver(true);
     }
-    private void GameOver()
+    private void GameOver(bool winOrlose)
     {
       if (gameInfo.GameOver)
         return;
+
+      if (!winOrlose)
+        gameInfo.CurrFaceStatus = FaceStatus.Dead;
 
       gameInfo.GameOver = true;
       openCellList.Clear();
@@ -340,11 +344,11 @@ namespace Minesweeper
             break;
           case CellMark.Flag:
             if (gameInfo.useMark)
-              cell.CellMark = CellMark.Mark;
+              cell.CellMark = CellMark.QuestionMark;
             else
               cell.CellMark = CellMark.None;
             break;
-          case CellMark.Mark:
+          case CellMark.QuestionMark:
             cell.CellMark = CellMark.None;
             break;
           default:
@@ -361,7 +365,7 @@ namespace Minesweeper
 
     private void Button_Click(object sender, RoutedEventArgs e)
     {
-      if (gameInfo.GameOver)
+      if (gameInfo.GameOver || gameInfo.started)
       {
         InitGame();
       }
@@ -371,6 +375,16 @@ namespace Minesweeper
     {
       CustomGameWindow customGameWindow = new CustomGameWindow(this) { DataContext = gameInfo };
       customGameWindow.ShowDialog();
+    }
+    private void me_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+    {
+      if (e.LeftButton == MouseButtonState.Pressed && !gameInfo.GameOver)
+        gameInfo.CurrFaceStatus = FaceStatus.Clicked;
+    }
+    private void me_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+    {
+      if (!gameInfo.GameOver)
+        gameInfo.CurrFaceStatus = FaceStatus.Normal;
     }
   }
 }
