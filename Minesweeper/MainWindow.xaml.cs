@@ -3,6 +3,7 @@ using Minesweeper.Models;
 using Minesweeper.Windows;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -42,6 +43,7 @@ namespace Minesweeper
       }
       gameInfo.started = false;
       gameInfo.GameOver = false;
+      openCellList.Clear();
     }
     private void StartGame()
     {
@@ -256,7 +258,7 @@ namespace Minesweeper
         ClickedCell.Flag = CellFlag.None;
         CheckGameWin(ClickedCell);
       }
-      if (ClickedCell.IsBomb || ClickedCell.AroundBombNum > 0)
+      if (ClickedCell.AroundBombNum > 0)
         return;
       var AroundValidCellList = GetAroundValidCell(ClickedCell);
       foreach (var cell in AroundValidCellList)
