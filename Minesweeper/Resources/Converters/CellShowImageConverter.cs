@@ -46,7 +46,7 @@ namespace Minesweeper.Resources.Converters
         {
           return Flag;
         }
-        else if (cellmark == CellMark.QuestionMark)
+        else if (cellmark == CellMark.QuestionMark && !gameOver)
         {
           return QuestionMark;
         }

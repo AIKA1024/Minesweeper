@@ -240,6 +240,8 @@ namespace Minesweeper
 
     private void OpenCell(Cell ClickedCell)
     {
+      if (ClickedCell.CellMark == CellMark.Flag)
+        return;
       if (ClickedCell.IsBomb)
       {
         ClickedCell.Explode = true;
@@ -247,8 +249,6 @@ namespace Minesweeper
         GameOver(false);
         return;
       }
-      if (ClickedCell.CellMark == CellMark.Flag)
-        return;
       if (!ClickedCell.IsOpened)
       {
         ClickedCell.IsOpened = true;
