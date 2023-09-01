@@ -48,7 +48,14 @@
 
         <Grid Margin="8">
           <TextBlock Height="26" Width="40" FontSize="22" TextAlignment="Center" FontFamily="{StaticResource LCD}"
-                 Background="Black" Foreground="Red" HorizontalAlignment="Left" Text="{Binding BombCount,StringFormat={}{0:D3}}"/>
+                 Background="Black" Foreground="Red" HorizontalAlignment="Left">
+            <TextBlock.Text>
+              <MultiBinding Converter="{x:Static converter:DifferenceConverter.Instance}">
+                <Binding Path="BombCount" />
+                <Binding Path="FlagCount" />
+              </MultiBinding>
+            </TextBlock.Text>
+          </TextBlock>
           <Button x:Name="faceButton" HorizontalAlignment="Center" Width="28" Height="28" Click="Button_Click" Padding="0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
             <Button.Style>
               <Style TargetType="Button">
@@ -82,8 +89,8 @@
               </Style>
             </Button.Style>
           </Button>
-          <TextBlock Height="26" Width="40" FontSize="22" TextAlignment="Center" FontFamily="{StaticResource LCD}"
-                 Background="Black" Foreground="Red" HorizontalAlignment="Right" Text="000"/>
+          <TextBlock Text="{Binding TimeCost,StringFormat={}{0:D3}}" Height="26" Width="40" FontSize="22" TextAlignment="Center" FontFamily="{StaticResource LCD}"
+                 Background="Black" Foreground="Red" HorizontalAlignment="Right"/>
         </Grid>
 
       </Grid>

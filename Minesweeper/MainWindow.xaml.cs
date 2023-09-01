@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
+using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -21,10 +23,11 @@ namespace Minesweeper
     MouseButtonState rightButton = MouseButtonState.Released;
     readonly List<Cell?> lastPressList = new List<Cell?>();
     readonly List<Cell> openCellList = new List<Cell>(10);
+    
     public MainWindow()
     {
-      InitializeComponent();
       gameInfo = new GameInfo();
+      InitializeComponent();
       for (int i = 0; i < gameInfo.maxCell; i++)
       {
         gameInfo.CellList.Add(CellPool.GetCell(i));
@@ -34,20 +37,22 @@ namespace Minesweeper
     }
     public void InitGame()
     {
-      if (!gameInfo.started)
+      if (!gameInfo.Started)
         return;
       gameInfo.CurrFaceStatus = FaceStatus.Normal;
       foreach (var cell in gameInfo.CellList)
       {
         cell.Init();
       }
-      gameInfo.started = false;
+      gameInfo.Started = false;
       gameInfo.GameOver = false;
       openCellList.Clear();
+      gameInfo.FlagList.Clear();
+      gameInfo.TimeCost = 0;
     }
     private void StartGame()
     {
-      gameInfo.started = true;
+      gameInfo.Started = true;
       gameInfo.GameOver = false;
       Cell SeleCell = (Cell)listBox.SelectedItem;
       gameInfo.BombList.Clear();
@@ -308,7 +313,7 @@ namespace Minesweeper
       }
       if (rightButton == MouseButtonState.Released && e.ChangedButton == MouseButton.Left && listBox.SelectedItem != null)
       {
-        if (!gameInfo.started)
+        if (!gameInfo.Started)
           StartGame();
 
         if (!seleCell.IsOpened)
@@ -343,12 +348,15 @@ namespace Minesweeper
         {
           case CellMark.None:
             cell.CellMark = CellMark.Flag;
+            gameInfo.FlagList.Add(cell);
             break;
           case CellMark.Flag:
             if (gameInfo.useMark)
               cell.CellMark = CellMark.QuestionMark;
             else
               cell.CellMark = CellMark.None;
+
+            gameInfo.FlagList.Remove(cell);
             break;
           case CellMark.QuestionMark:
             cell.CellMark = CellMark.None;
@@ -367,7 +375,7 @@ namespace Minesweeper
 
     private void Button_Click(object sender, RoutedEventArgs e)
     {
-      if (gameInfo.GameOver || gameInfo.started)
+      if (gameInfo.GameOver || gameInfo.Started)
       {
         InitGame();
       }
