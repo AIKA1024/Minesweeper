@@ -44,7 +44,6 @@ namespace Minesweeper.Models
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(BombCount)));
       }
     }
-    private int flagCount = 30;
     public int FlagCount
     {
       get => FlagList.Count;
