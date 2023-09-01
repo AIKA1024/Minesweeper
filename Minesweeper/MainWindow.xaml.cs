@@ -23,7 +23,7 @@ namespace Minesweeper
     MouseButtonState rightButton = MouseButtonState.Released;
     readonly List<Cell?> lastPressList = new List<Cell?>();
     readonly List<Cell> openCellList = new List<Cell>(10);
-    
+
     public MainWindow()
     {
       gameInfo = new GameInfo();
@@ -37,8 +37,6 @@ namespace Minesweeper
     }
     public void InitGame()
     {
-      if (!gameInfo.Started)
-        return;
       gameInfo.CurrFaceStatus = FaceStatus.Normal;
       foreach (var cell in gameInfo.CellList)
       {
@@ -375,10 +373,7 @@ namespace Minesweeper
 
     private void Button_Click(object sender, RoutedEventArgs e)
     {
-      if (gameInfo.GameOver || gameInfo.Started)
-      {
-        InitGame();
-      }
+      InitGame();
     }
 
     private void CustomMenuItem_Click(object sender, RoutedEventArgs e)
