@@ -6,8 +6,8 @@
         xmlns:model="clr-namespace:Minesweeper.Models"
         xmlns:converter="clr-namespace:Minesweeper.Resources.Converters"
         xmlns:local="clr-namespace:Minesweeper"
-        mc:Ignorable="d"
-        Title="扫雷" Height="447" Width="611" WindowStartupLocation="CenterScreen"
+        mc:Ignorable="d" SizeToContent="WidthAndHeight"
+        Title="扫雷" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize"
         PreviewMouseDown="me_PreviewMouseDown" PreviewMouseUp="me_PreviewMouseUp">
   <Window.Resources>
     <BooleanToVisibilityConverter x:Key="BoolToVisConverter" />
@@ -94,10 +94,10 @@
         </Grid>
 
       </Grid>
-      <ListBox Grid.Row="1" MouseLeave="listBox_MouseLeave" Margin="8" x:Name="listBox" ItemsSource="{Binding CellList}"
+      <ListBox x:Name="listBox" Grid.Row="1" Margin="8" ItemsSource="{Binding CellList}"
              ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled"
-             SelectionChanged="listBox_SelectionChanged" IsEnabled="{Binding GameOver,Converter={x:Static converter:InverseBoolConvert.Instance}}"
-             BorderThickness="0">
+             IsEnabled="{Binding GameOver,Converter={x:Static converter:InverseBoolConvert.Instance}}"
+             BorderThickness="0" MouseLeave="listBox_MouseLeave" SelectionChanged="listBox_SelectionChanged">
         <ListBox.Template>
           <ControlTemplate>
             <Grid>
@@ -111,7 +111,8 @@
         </ListBox.Template>
         <ListBox.ItemsPanel>
           <ItemsPanelTemplate>
-            <WrapPanel Width="{Binding ActualWidth,RelativeSource={RelativeSource AncestorType=ListBox,AncestorLevel=1}}"/>
+            <WrapPanel d:Width="400" d:Height="300"
+                       Width="{Binding Column,Converter={x:Static converter:ColumnToWidthConvert.Instance}}"/>
           </ItemsPanelTemplate>
         </ListBox.ItemsPanel>
         <ListBox.ItemContainerStyle>

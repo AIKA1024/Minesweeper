@@ -20,7 +20,10 @@ namespace Minesweeper.Models
       get { return row; }
       set
       {
-        row = value;
+        if (value < 9)
+          row = 9;
+        else
+          row = value;
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Row)));
       }
     }
@@ -30,7 +33,10 @@ namespace Minesweeper.Models
       get { return column; }
       set
       {
-        column = value;
+        if (value < 9)
+          column = 9;
+        else
+          column = value;
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Column)));
       }
     }
@@ -40,7 +46,10 @@ namespace Minesweeper.Models
       get { return bombCount; }
       set
       {
-        bombCount = value;
+        if (value < 10)
+          bombCount = 10;
+        else
+          bombCount = value;
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(BombCount)));
       }
     }
@@ -86,7 +95,7 @@ namespace Minesweeper.Models
       get { return gameOver; }
       set
       {
-        if (started == value)
+        if (gameOver == value)
           return;
 
         if (value)

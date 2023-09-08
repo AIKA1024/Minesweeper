@@ -3,19 +3,13 @@ using Minesweeper.Models;
 using Minesweeper.Windows;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Threading;
-using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace Minesweeper
 {
-  /// <summary>
-  /// Interaction logic for MainWindow.xaml
-  /// </summary>
   public partial class MainWindow : Window
   {
     GameInfo gameInfo;
@@ -23,7 +17,6 @@ namespace Minesweeper
     MouseButtonState rightButton = MouseButtonState.Released;
     readonly List<Cell?> lastPressList = new List<Cell?>();
     readonly List<Cell> openCellList = new List<Cell>(10);
-
     public MainWindow()
     {
       gameInfo = new GameInfo();
@@ -300,6 +293,7 @@ namespace Minesweeper
       }
     }
 
+    #region 控件事件处理器
     private void ListBoxItem_MouseButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
     {
       leftButton = e.LeftButton;
@@ -329,15 +323,8 @@ namespace Minesweeper
         UpdatePressCell();
       }
     }
-    private void listBox_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
-    {
-      listBox.SelectedItem = null;
-    }
-
-
     private void listBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-
       Cell cell = (Cell)listBox.SelectedItem;
       if (leftButton == MouseButtonState.Released && rightButton == MouseButtonState.Pressed &&
          cell != null && !cell.IsOpened)
@@ -370,12 +357,14 @@ namespace Minesweeper
       }
       UpdatePressCell();
     }
-
     private void Button_Click(object sender, RoutedEventArgs e)
     {
       InitGame();
     }
-
+    private void listBox_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+    {
+      listBox.SelectedItem = null;
+    }
     private void CustomMenuItem_Click(object sender, RoutedEventArgs e)
     {
       CustomGameWindow customGameWindow = new CustomGameWindow(this) { DataContext = gameInfo };
@@ -391,5 +380,6 @@ namespace Minesweeper
       if (!gameInfo.GameOver)
         gameInfo.CurrFaceStatus = FaceStatus.Normal;
     }
+    #endregion
   }
 }
