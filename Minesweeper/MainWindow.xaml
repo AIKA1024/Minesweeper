@@ -19,9 +19,9 @@
     </Grid.RowDefinitions>
     <Menu FontSize="12" Background="White" BorderThickness="0 0 0 1.5" BorderBrush="#f0f0f0">
       <MenuItem Header="游戏">
-        <MenuItem Header="初级"/>
-        <MenuItem Header="中级"/>
-        <MenuItem Header="高级"/>
+        <MenuItem Header="初级" Click="StandardDifficItem_Click"/>
+        <MenuItem Header="中级" Click="StandardDifficItem_Click"/>
+        <MenuItem Header="高级" Click="StandardDifficItem_Click"/>
         <MenuItem Header="自定义" Click="CustomMenuItem_Click"/>
         <Separator/>
         <MenuItem Header="标记(?)"/>

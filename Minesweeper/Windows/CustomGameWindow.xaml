@@ -9,11 +9,11 @@
   <Canvas>
     <StackPanel Orientation="Horizontal" Canvas.Left="14" Canvas.Top="30">
       <TextBlock Text="高度(H):"/>
-      <TextBox IsEnabled="False" x:Name="rowTextBox" Margin="10 0 0 0" Width="40" Text="{Binding Row,Mode=OneWay}" InputScope="Number"/>
+      <TextBox x:Name="rowTextBox" Margin="10 0 0 0" Width="40" Text="{Binding Row,Mode=OneWay}" InputScope="Number"/>
     </StackPanel>
     <StackPanel Orientation="Horizontal" Canvas.Left="11" Canvas.Top="50">
       <TextBlock Text="宽度(W):"/>
-      <TextBox IsEnabled="False" x:Name="columnTextBox" Margin="10 0 0 0" Width="40"  Text="{Binding Column,Mode=OneWay}"/>
+      <TextBox x:Name="columnTextBox" Margin="10 0 0 0" Width="40"  Text="{Binding Column,Mode=OneWay}"/>
     </StackPanel>
     <StackPanel Orientation="Horizontal" Canvas.Left="11" Canvas.Top="70">
       <TextBlock Text="雷数(M):"/>

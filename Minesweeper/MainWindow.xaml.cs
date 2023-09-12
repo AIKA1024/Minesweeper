@@ -21,7 +21,7 @@ namespace Minesweeper
     {
       gameInfo = new GameInfo();
       InitializeComponent();
-      for (int i = 0; i < gameInfo.maxCell; i++)
+      for (int i = 0; i < gameInfo.MaxCell; i++)
       {
         gameInfo.CellList.Add(CellPool.GetCell(i));
       }
@@ -31,15 +31,21 @@ namespace Minesweeper
     public void InitGame()
     {
       gameInfo.CurrFaceStatus = FaceStatus.Normal;
-      foreach (var cell in gameInfo.CellList)
+      while (gameInfo.CellList.Count < gameInfo.MaxCell)
+        gameInfo.CellList.Add(CellPool.GetCell(gameInfo.CellList.Count + 1));
+      for (int i = gameInfo.MaxCell; gameInfo.MaxCell < gameInfo.CellList.Count; i = gameInfo.CellList.Count - gameInfo.MaxCell)
       {
-        cell.Init();
+        CellPool.ReturnCell(gameInfo.CellList[gameInfo.CellList.Count - i]);
+        gameInfo.CellList.RemoveAt(gameInfo.CellList.Count - i);
       }
+      foreach (var cell in gameInfo.CellList)
+        cell.Init();
       gameInfo.Started = false;
       gameInfo.GameOver = false;
       openCellList.Clear();
       gameInfo.FlagList.Clear();
       gameInfo.TimeCost = 0;
+      ReCalculateOffset();
     }
     private void StartGame()
     {
@@ -50,9 +56,9 @@ namespace Minesweeper
       //布雷
       for (int i = 0; i < gameInfo.BombCount; i++)
       {
-        int bombIndex = Random.Shared.Next(0, gameInfo.maxCell);
+        int bombIndex = Random.Shared.Next(0, gameInfo.MaxCell);
         while (bombIndex == SeleCell.Index || gameInfo.CellList[bombIndex].IsBomb == true)
-          bombIndex = Random.Shared.Next(0, gameInfo.maxCell);
+          bombIndex = Random.Shared.Next(0, gameInfo.MaxCell);
 
         gameInfo.CellList[bombIndex].IsBomb = true;
         gameInfo.BombList.Add(gameInfo.CellList[bombIndex]);
@@ -181,7 +187,7 @@ namespace Minesweeper
       {
         int offset = cell.Index + gameInfo.OffsetList[i];
         int offsetRow = i / 3;
-        if (offset >= 0 && offset < gameInfo.maxCell &&
+        if (offset >= 0 && offset < gameInfo.MaxCell &&
           offset / gameInfo.Column == (int)Math.Floor(((float)gameInfo.OffsetList[offsetRow * 3 + 1] + cell.Index) / gameInfo.Column))//格子位置在最小、最大值范围内，并且九宫格有三行，该偏移量的位置和该行中间的偏移量对列数的商相等，说明没有换行
         {
           result.Add(gameInfo.CellList[offset]);
@@ -202,7 +208,7 @@ namespace Minesweeper
       {
         int offset = cell.Index + gameInfo.OffsetList[i];
         int offsetRow = i / 3;
-        if (offset >= 0 && offset < gameInfo.maxCell &&
+        if (offset >= 0 && offset < gameInfo.MaxCell &&
           offset / gameInfo.Column == (int)Math.Floor(((float)gameInfo.OffsetList[offsetRow * 3 + 1] + cell.Index) / gameInfo.Column))//格子位置在最小、最大值范围内，并且九宫格有三行，该偏移量的位置和该行中间的偏移量对列数的商相等，说明没有换行
         {
           result.Add(gameInfo.CellList[offset]);
@@ -223,7 +229,7 @@ namespace Minesweeper
       {
         int offset = cell.Index + gameInfo.OffsetList[i];
         int offsetRow = i / 3;
-        if (offset >= 0 && offset < gameInfo.maxCell &&
+        if (offset >= 0 && offset < gameInfo.MaxCell &&
           offset / gameInfo.Column == (int)Math.Floor(((float)gameInfo.OffsetList[offsetRow * 3 + 1] + cell.Index) / gameInfo.Column))//格子位置在最小、最大值范围内，并且九宫格有三行，该偏移量的位置和该行中间的偏移量对列数的商相等，说明没有换行
         {
           result.Add(gameInfo.CellList[offset]);
@@ -273,7 +279,7 @@ namespace Minesweeper
     private void CheckGameWin(Cell cell)
     {
       openCellList.Add(cell);
-      if (openCellList.Count == gameInfo.maxCell - gameInfo.BombCount)
+      if (openCellList.Count == gameInfo.MaxCell - gameInfo.BombCount)
         GameOver(true);
     }
     private void GameOver(bool winOrlose)
@@ -381,5 +387,30 @@ namespace Minesweeper
         gameInfo.CurrFaceStatus = FaceStatus.Normal;
     }
     #endregion
+
+    private void StandardDifficItem_Click(object sender, RoutedEventArgs e)
+    {
+      MenuItem menuItem = (MenuItem)sender;
+      switch (menuItem.Header)
+      {
+        case "初级":
+          gameInfo.Row = 9;
+          gameInfo.Column = 9;
+          gameInfo.BombCount = 10;
+          break;
+        case "中级":
+          gameInfo.Row = 16;
+          gameInfo.Column = 16;
+          gameInfo.BombCount = 40;
+          break;
+        case "高级":
+          gameInfo.Row = 16;
+          gameInfo.Column = 30;
+          gameInfo.BombCount = 99;
+          break;
+      }
+      InitGame();
+      ReCalculateOffset();
+    }
   }
 }

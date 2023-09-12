@@ -7,13 +7,18 @@ using Minesweeper.Models;
 
 namespace Minesweeper.Class
 {
-    public static class CellPool
+  public static class CellPool
   {
     private static List<Cell> cellPool = new List<Cell>();
     public static Cell GetCell(int index)
     {
       if (cellPool.Count != 0)
-        return cellPool.Last();
+      {
+        var temp = cellPool.Last();
+        temp.Index = index;
+        cellPool.RemoveAt(cellPool.Count-1);
+        return temp;
+      }
       else
         return new Cell(index);
     }
@@ -34,8 +39,8 @@ namespace Minesweeper.Class
 
     public static void ReturnCell(Cell cell)
     {
-      if (!cellPool.Contains(cell))
-        cellPool.Add(cell);
+      //if (!cellPool.Contains(cell))
+      cellPool.Add(cell);
     }
   }
 }

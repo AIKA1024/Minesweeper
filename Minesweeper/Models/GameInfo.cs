@@ -67,8 +67,11 @@ namespace Minesweeper.Models
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TimeCost)));
       }
     }
-
-    public int maxCell = 480;
+    public int MaxCell 
+    {
+      get => Row * Column;
+    }
+    
     public bool useMark = true;
     private bool started;
     public bool Started
