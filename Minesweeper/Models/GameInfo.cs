@@ -15,7 +15,7 @@ namespace Minesweeper.Models
   {
     public event PropertyChangedEventHandler? PropertyChanged;
     private System.Timers.Timer timer;
-    private int row = 16;
+    private int row = 9;
     public int Row
     {
       get { return row; }
@@ -28,7 +28,7 @@ namespace Minesweeper.Models
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Row)));
       }
     }
-    private int column = 30;
+    private int column = 9;
     public int Column
     {
       get { return column; }
@@ -41,7 +41,7 @@ namespace Minesweeper.Models
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Column)));
       }
     }
-    private int bombCount = 30;
+    private int bombCount = 10;
     public int BombCount
     {
       get { return bombCount; }
