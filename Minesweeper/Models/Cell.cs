@@ -34,7 +34,7 @@ namespace Minesweeper.Models
       IsBomb = false;
       Explode = false;
       Pressed = false;
-      flag = CellFlag.None;
+      Flag = CellFlag.None;
     }
     public int Index { get; set; }
     private int aroundBombNum;

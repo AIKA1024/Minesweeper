@@ -32,7 +32,7 @@ namespace Minesweeper
     {
       gameInfo.CurrFaceStatus = FaceStatus.Normal;
       while (gameInfo.CellList.Count < gameInfo.MaxCell)
-        gameInfo.CellList.Add(CellPool.GetCell(gameInfo.CellList.Count + 1));
+        gameInfo.CellList.Add(CellPool.GetCell(gameInfo.CellList.Count));
       for (int i = gameInfo.MaxCell; gameInfo.MaxCell < gameInfo.CellList.Count; i = gameInfo.CellList.Count - gameInfo.MaxCell)
       {
         CellPool.ReturnCell(gameInfo.CellList[gameInfo.CellList.Count - i]);
