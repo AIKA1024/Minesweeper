@@ -29,6 +29,9 @@ namespace Minesweeper.Resources.Converters
         case FaceStatus.Dead:
           image.UriSource = new Uri("./Resources/Pictures/DeadFace.png", UriKind.RelativeOrAbsolute);
           break;
+        case FaceStatus.Win:
+          image.UriSource = new Uri("./Resources/Pictures/WinFace.png", UriKind.RelativeOrAbsolute);
+          break;
       }
       image.EndInit();
       return image;

@@ -8,7 +8,8 @@ namespace Minesweeper.Models
   {
     Normal,
     Clicked,
-    Dead
+    Dead,
+    Win
   }
   public class GameInfo : INotifyPropertyChanged
   {
@@ -121,6 +122,17 @@ namespace Minesweeper.Models
           faceStatus = value;
           PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CurrFaceStatus)));
         }
+      }
+    }
+    private bool winOrLose;
+
+    public bool WinOrLose
+    {
+      get { return winOrLose; }
+      set 
+      { 
+        winOrLose = value;
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(WinOrLose)));
       }
     }
 

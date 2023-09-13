@@ -287,15 +287,25 @@ namespace Minesweeper
       if (gameInfo.GameOver)
         return;
 
-      if (!winOrlose)
+      gameInfo.WinOrLose = winOrlose;
+      if (winOrlose)
+        gameInfo.CurrFaceStatus = FaceStatus.Win;
+      else
         gameInfo.CurrFaceStatus = FaceStatus.Dead;
 
       gameInfo.GameOver = true;
       openCellList.Clear();
       foreach (var cell in gameInfo.BombList)
       {
-        if (cell.CellMark != CellMark.Flag)
-          cell.IsOpened = true;
+        if (winOrlose)
+        {
+          cell.CellMark = CellMark.Flag;
+        }
+        else
+        {
+          if (cell.CellMark != CellMark.Flag)
+            cell.IsOpened = true;
+        }
       }
     }
 

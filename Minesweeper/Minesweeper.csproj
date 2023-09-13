@@ -18,6 +18,7 @@
     <None Remove="Resources\Pictures\DeadFace.png" />
     <None Remove="Resources\Pictures\NormalFace.png" />
     <None Remove="Resources\Pictures\QuestionMark.png" />
+    <None Remove="Resources\Pictures\WinFace.png" />
     <None Remove="Resources\电子数字.ttf" />
   </ItemGroup>
 
@@ -29,6 +30,7 @@
     <Resource Include="Resources\Pictures\MistakeFlag.png" />
     <Resource Include="Resources\Pictures\NormalFace.png" />
     <Resource Include="Resources\Pictures\QuestionMark.png" />
+    <Resource Include="Resources\Pictures\WinFace.png" />
     <Resource Include="Resources\电子数字.ttf" />
   </ItemGroup>
 
