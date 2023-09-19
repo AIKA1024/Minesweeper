@@ -69,7 +69,7 @@
                           <Rectangle x:Name="rightThickness"  Fill="#808080" Width="2" VerticalAlignment="stretch" HorizontalAlignment="Right"/>
                           <Rectangle x:Name="buttomThickness" Fill="#808080" Height="2" VerticalAlignment="Bottom" HorizontalAlignment="stretch"/>
 
-                          <Image x:Name="image" Width="20" RenderOptions.BitmapScalingMode="NearestNeighbor" HorizontalAlignment="Center" VerticalAlignment="Center"
+                          <Image x:Name="image" Width="20" Margin="-1 -1 0 0" RenderOptions.BitmapScalingMode="NearestNeighbor" HorizontalAlignment="Center" VerticalAlignment="Center"
                             Source="{Binding DataContext.CurrFaceStatus,ElementName=me,Converter={x:Static converter:FaceStatusToImageConverter.Instance}}"/>
                         </Grid>
                       </Border>
