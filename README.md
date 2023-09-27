@@ -1,1 +1,2 @@
 # Minesweeper
+![picture](./show.png)
