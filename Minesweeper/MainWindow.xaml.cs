@@ -396,7 +396,6 @@ namespace Minesweeper
       if (!gameInfo.GameOver)
         gameInfo.CurrFaceStatus = FaceStatus.Normal;
     }
-    #endregion
 
     private void StandardDifficItem_Click(object sender, RoutedEventArgs e)
     {
@@ -432,5 +431,6 @@ namespace Minesweeper
     {
       gameInfo.UseMark = !gameInfo.UseMark;
     }
+    #endregion
   }
 }
