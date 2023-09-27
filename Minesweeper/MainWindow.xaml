@@ -24,11 +24,11 @@
         <MenuItem Header="高级" Click="StandardDifficItem_Click"/>
         <MenuItem Header="自定义" Click="CustomMenuItem_Click"/>
         <Separator/>
-        <MenuItem Header="标记(?)"/>
+        <MenuItem Header="标记(?)" IsChecked="{Binding UseMark}" Click="MarkMenuItem_Click"/>
         <Separator/>
         <MenuItem Header="扫雷英雄榜"/>
         <Separator/>
-        <MenuItem Header="退出"/>
+        <MenuItem Header="退出" Click="ExitMenuItem_Click"/>
 
       </MenuItem>
       <MenuItem Header="帮助"/>

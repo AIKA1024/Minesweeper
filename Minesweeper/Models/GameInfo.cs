@@ -73,7 +73,17 @@ namespace Minesweeper.Models
       get => Row * Column;
     }
     
-    public bool useMark = true;
+    private bool useMark = true;
+
+    public bool UseMark
+    {
+      get { return useMark; }
+      set 
+      {
+        useMark = value; 
+        PropertyChanged?.Invoke(this,new PropertyChangedEventArgs(nameof(UseMark)));
+      }
+    }
     private bool started;
     public bool Started
     {
@@ -135,6 +145,8 @@ namespace Minesweeper.Models
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(WinOrLose)));
       }
     }
+
+
 
     public readonly List<int> OffsetList = new List<int>(9);
     public readonly ObservableCollection<Cell> FlagList = new ObservableCollection<Cell>();

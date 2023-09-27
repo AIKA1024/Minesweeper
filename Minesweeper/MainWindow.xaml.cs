@@ -352,7 +352,7 @@ namespace Minesweeper
             gameInfo.FlagList.Add(cell);
             break;
           case CellMark.Flag:
-            if (gameInfo.useMark)
+            if (gameInfo.UseMark)
               cell.CellMark = CellMark.QuestionMark;
             else
               cell.CellMark = CellMark.None;
@@ -421,6 +421,16 @@ namespace Minesweeper
       }
       InitGame();
       ReCalculateOffset();
+    }
+
+    private void ExitMenuItem_Click(object sender, RoutedEventArgs e)
+    {
+      Application.Current.Shutdown();
+    }
+
+    private void MarkMenuItem_Click(object sender, RoutedEventArgs e)
+    {
+      gameInfo.UseMark = !gameInfo.UseMark;
     }
   }
 }
