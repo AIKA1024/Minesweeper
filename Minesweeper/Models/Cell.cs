@@ -78,36 +78,6 @@ namespace Minesweeper.Models
       }
     }
 
-
-    //private bool isFlaged;
-
-    //public bool IsFlaged
-    //{
-    //  get { return isFlaged; }
-    //  set
-    //  {
-    //    if (isFlaged != value)
-    //    {
-    //      isFlaged = value;
-    //      PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsFlaged)));
-    //    }
-    //  }
-    //}
-    //private bool isMarked;
-
-    //public bool IsMarked
-    //{
-    //  get { return isMarked; }
-    //  set
-    //  {
-    //    if (isMarked != value)
-    //    {
-    //      isMarked = value;
-    //      PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsMarked)));
-    //    }
-    //  }
-    //}
-
     private bool isBomb;
     public bool IsBomb
     {
