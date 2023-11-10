@@ -180,7 +180,7 @@ namespace Minesweeper
     /// </summary>
     /// <param name=""></param>
     /// <returns></returns>
-    private List<Cell> GetUDLFCell(Cell cell)
+    private List<Cell> GetUDLRCell(Cell cell)
     {
       var result = new List<Cell>();
       for (int i = 1; i < 8; i += 2)
