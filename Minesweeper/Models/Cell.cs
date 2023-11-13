@@ -72,6 +72,10 @@ namespace Minesweeper.Models
       {
         if (cellMark != value)
         {
+          if (value == CellMark.Flag)
+            GameInfo.Instance.FlagList.Add(this);
+          else if (value!=CellMark.Flag && cellMark == CellMark.Flag)
+            GameInfo.Instance.FlagList.Remove(this);
           cellMark = value;
           PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CellMark)));
         }

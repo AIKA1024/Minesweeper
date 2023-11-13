@@ -30,8 +30,12 @@
         <Separator/>
         <MenuItem Header="退出" Click="ExitMenuItem_Click"/>
       </MenuItem>
+      <MenuItem Header="功能">
+        <MenuItem Header="全部插旗" Click="AllFlagMenuItem_Click"/>
+        <MenuItem Header="全部去旗" Click="CancelAllFlagMenuItem_Click"/>
+        <Separator/>
+      </MenuItem>
       <MenuItem Header="帮助"/>
-      <MenuItem Header="作弊"/>
     </Menu>
 
     <Grid Grid.Row="1" Margin="3 3 0 0" Background="#c0c0c0">

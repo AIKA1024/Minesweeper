@@ -369,15 +369,12 @@ namespace Minesweeper
         {
           case CellMark.None:
             cell.CellMark = CellMark.Flag;
-            GameInfo.Instance.FlagList.Add(cell);
             break;
           case CellMark.Flag:
             if (GameInfo.Instance.UseMark)
               cell.CellMark = CellMark.QuestionMark;
             else
               cell.CellMark = CellMark.None;
-
-            GameInfo.Instance.FlagList.Remove(cell);
             break;
           case CellMark.QuestionMark:
             cell.CellMark = CellMark.None;
@@ -456,6 +453,25 @@ namespace Minesweeper
     {
       new RankingListWindow().ShowDialog();
     }
+
+    private void AllFlagMenuItem_Click(object sender, RoutedEventArgs e)
+    {
+      foreach (var item in GameInfo.Instance.CellList)
+      {
+        if (item.CellMark != CellMark.Flag)
+        {
+          item.CellMark = CellMark.Flag;
+        }
+      }
+    }
+
+    private void CancelAllFlagMenuItem_Click(object sender, RoutedEventArgs e)
+    {
+      for (int i = GameInfo.Instance.FlagList.Count - 1; i > -1; i--)
+        GameInfo.Instance.FlagList[i].CellMark = CellMark.None;
+    }
     #endregion
+
+
   }
 }
