@@ -13,6 +13,16 @@ namespace Minesweeper.Models
   }
   public class GameInfo : INotifyPropertyChanged
   {
+    private static GameInfo instance;
+    public static GameInfo Instance
+    {
+      get 
+      {
+        instance ??= new GameInfo();
+        return instance; 
+      }
+    }
+
     public event PropertyChangedEventHandler? PropertyChanged;
     private System.Timers.Timer timer;
     private int row = 9;
@@ -153,7 +163,7 @@ namespace Minesweeper.Models
     public readonly List<Cell> BombList = new List<Cell>(10);
     public ObservableCollection<Cell> CellList { get; set; }
 
-    public GameInfo()
+    private GameInfo()
     {
       timer = new() { Interval = 1000 };
       timer.Elapsed += (s, e) => { TimeCost++; };

@@ -12,59 +12,57 @@ namespace Minesweeper
 {
   public partial class MainWindow : Window
   {
-    GameInfo gameInfo;
     MouseButtonState leftButton = MouseButtonState.Released;
     MouseButtonState rightButton = MouseButtonState.Released;
     readonly List<Cell?> lastPressList = new List<Cell?>();
     readonly List<Cell> openCellList = new List<Cell>(10);
     public MainWindow()
     {
-      gameInfo = new GameInfo();
       InitializeComponent();
-      for (int i = 0; i < gameInfo.MaxCell; i++)
+      for (int i = 0; i < GameInfo.Instance.MaxCell; i++)
       {
-        gameInfo.CellList.Add(CellPool.GetCell(i));
+        GameInfo.Instance.CellList.Add(CellPool.GetCell(i));
       }
       ReCalculateOffset();
-      DataContext = gameInfo;
+      DataContext = GameInfo.Instance;
     }
     public void InitGame()
     {
-      gameInfo.CurrFaceStatus = FaceStatus.Normal;
-      while (gameInfo.CellList.Count < gameInfo.MaxCell)
-        gameInfo.CellList.Add(CellPool.GetCell(gameInfo.CellList.Count));
-      for (int i = gameInfo.MaxCell; gameInfo.MaxCell < gameInfo.CellList.Count; i = gameInfo.CellList.Count - gameInfo.MaxCell)
+      GameInfo.Instance.CurrFaceStatus = FaceStatus.Normal;
+      while (GameInfo.Instance.CellList.Count < GameInfo.Instance.MaxCell)
+        GameInfo.Instance.CellList.Add(CellPool.GetCell(GameInfo.Instance.CellList.Count));
+      for (int i = GameInfo.Instance.MaxCell; GameInfo.Instance.MaxCell < GameInfo.Instance.CellList.Count; i = GameInfo.Instance.CellList.Count - GameInfo.Instance.MaxCell)
       {
-        CellPool.ReturnCell(gameInfo.CellList[gameInfo.CellList.Count - i]);
-        gameInfo.CellList.RemoveAt(gameInfo.CellList.Count - i);
+        CellPool.ReturnCell(GameInfo.Instance.CellList[GameInfo.Instance.CellList.Count - i]);
+        GameInfo.Instance.CellList.RemoveAt(GameInfo.Instance.CellList.Count - i);
       }
-      foreach (var cell in gameInfo.CellList)
+      foreach (var cell in GameInfo.Instance.CellList)
         cell.Init();
-      gameInfo.Started = false;
-      gameInfo.GameOver = false;
+      GameInfo.Instance.Started = false;
+      GameInfo.Instance.GameOver = false;
       openCellList.Clear();
-      gameInfo.FlagList.Clear();
-      gameInfo.TimeCost = 0;
+      GameInfo.Instance.FlagList.Clear();
+      GameInfo.Instance.TimeCost = 0;
       ReCalculateOffset();
     }
     private void StartGame()
     {
-      gameInfo.Started = true;
-      gameInfo.GameOver = false;
+      GameInfo.Instance.Started = true;
+      GameInfo.Instance.GameOver = false;
       Cell SeleCell = (Cell)listBox.SelectedItem;
-      gameInfo.BombList.Clear();
+      GameInfo.Instance.BombList.Clear();
       //布雷
-      for (int i = 0; i < gameInfo.BombCount; i++)
+      for (int i = 0; i < GameInfo.Instance.BombCount; i++)
       {
-        int bombIndex = Random.Shared.Next(0, gameInfo.MaxCell);
-        while (bombIndex == SeleCell.Index || gameInfo.CellList[bombIndex].IsBomb == true)
-          bombIndex = Random.Shared.Next(0, gameInfo.MaxCell);
+        int bombIndex = Random.Shared.Next(0, GameInfo.Instance.MaxCell);
+        while (bombIndex == SeleCell.Index || GameInfo.Instance.CellList[bombIndex].IsBomb == true)
+          bombIndex = Random.Shared.Next(0, GameInfo.Instance.MaxCell);
 
-        gameInfo.CellList[bombIndex].IsBomb = true;
-        gameInfo.BombList.Add(gameInfo.CellList[bombIndex]);
+        GameInfo.Instance.CellList[bombIndex].IsBomb = true;
+        GameInfo.Instance.BombList.Add(GameInfo.Instance.CellList[bombIndex]);
       }
       //计算周围雷数
-      foreach (var bombCell in gameInfo.BombList)
+      foreach (var bombCell in GameInfo.Instance.BombList)
       {
         foreach (var cell in GetAroundValidCell(bombCell))
         {
@@ -81,19 +79,19 @@ namespace Minesweeper
     }
     private void ReCalculateOffset()
     {
-      gameInfo.OffsetList.Clear();
+      GameInfo.Instance.OffsetList.Clear();
       ///九宫格的偏移位置
-      gameInfo.OffsetList.Add(-gameInfo.Column - 1);
-      gameInfo.OffsetList.Add(-gameInfo.Column);
-      gameInfo.OffsetList.Add(-gameInfo.Column + 1);
+      GameInfo.Instance.OffsetList.Add(-GameInfo.Instance.Column - 1);
+      GameInfo.Instance.OffsetList.Add(-GameInfo.Instance.Column);
+      GameInfo.Instance.OffsetList.Add(-GameInfo.Instance.Column + 1);
 
-      gameInfo.OffsetList.Add(-1);
-      gameInfo.OffsetList.Add(0);
-      gameInfo.OffsetList.Add(1);
+      GameInfo.Instance.OffsetList.Add(-1);
+      GameInfo.Instance.OffsetList.Add(0);
+      GameInfo.Instance.OffsetList.Add(1);
 
-      gameInfo.OffsetList.Add(gameInfo.Column - 1);
-      gameInfo.OffsetList.Add(gameInfo.Column);
-      gameInfo.OffsetList.Add(gameInfo.Column + 1);
+      GameInfo.Instance.OffsetList.Add(GameInfo.Instance.Column - 1);
+      GameInfo.Instance.OffsetList.Add(GameInfo.Instance.Column);
+      GameInfo.Instance.OffsetList.Add(GameInfo.Instance.Column + 1);
     }
 
     private void UpdatePressCell()
@@ -185,12 +183,12 @@ namespace Minesweeper
       var result = new List<Cell>();
       for (int i = 1; i < 8; i += 2)
       {
-        int offset = cell.Index + gameInfo.OffsetList[i];
+        int offset = cell.Index + GameInfo.Instance.OffsetList[i];
         int offsetRow = i / 3;
-        if (offset >= 0 && offset < gameInfo.MaxCell &&
-          offset / gameInfo.Column == (int)Math.Floor(((float)gameInfo.OffsetList[offsetRow * 3 + 1] + cell.Index) / gameInfo.Column))//格子位置在最小、最大值范围内，并且九宫格有三行，该偏移量的位置和该行中间的偏移量对列数的商相等，说明没有换行
+        if (offset >= 0 && offset < GameInfo.Instance.MaxCell &&
+          offset / GameInfo.Instance.Column == (int)Math.Floor(((float)GameInfo.Instance.OffsetList[offsetRow * 3 + 1] + cell.Index) / GameInfo.Instance.Column))//格子位置在最小、最大值范围内，并且九宫格有三行，该偏移量的位置和该行中间的偏移量对列数的商相等，说明没有换行
         {
-          result.Add(gameInfo.CellList[offset]);
+          result.Add(GameInfo.Instance.CellList[offset]);
         }
       }
       return result;
@@ -204,14 +202,14 @@ namespace Minesweeper
     {
       var result = new List<Cell>();
 
-      for (int i = 0; i < gameInfo.OffsetList.Count; i++)
+      for (int i = 0; i < GameInfo.Instance.OffsetList.Count; i++)
       {
-        int offset = cell.Index + gameInfo.OffsetList[i];
+        int offset = cell.Index + GameInfo.Instance.OffsetList[i];
         int offsetRow = i / 3;
-        if (offset >= 0 && offset < gameInfo.MaxCell &&
-          offset / gameInfo.Column == (int)Math.Floor(((float)gameInfo.OffsetList[offsetRow * 3 + 1] + cell.Index) / gameInfo.Column))//格子位置在最小、最大值范围内，并且九宫格有三行，该偏移量的位置和该行中间的偏移量对列数的商相等，说明没有换行
+        if (offset >= 0 && offset < GameInfo.Instance.MaxCell &&
+          offset / GameInfo.Instance.Column == (int)Math.Floor(((float)GameInfo.Instance.OffsetList[offsetRow * 3 + 1] + cell.Index) / GameInfo.Instance.Column))//格子位置在最小、最大值范围内，并且九宫格有三行，该偏移量的位置和该行中间的偏移量对列数的商相等，说明没有换行
         {
-          result.Add(gameInfo.CellList[offset]);
+          result.Add(GameInfo.Instance.CellList[offset]);
         }
       }
       return result;
@@ -225,14 +223,14 @@ namespace Minesweeper
     private List<Cell?> GetAroundCell(Cell cell)
     {
       var result = new List<Cell?>();
-      for (int i = 0; i < gameInfo.OffsetList.Count; i++)
+      for (int i = 0; i < GameInfo.Instance.OffsetList.Count; i++)
       {
-        int offset = cell.Index + gameInfo.OffsetList[i];
+        int offset = cell.Index + GameInfo.Instance.OffsetList[i];
         int offsetRow = i / 3;
-        if (offset >= 0 && offset < gameInfo.MaxCell &&
-          offset / gameInfo.Column == (int)Math.Floor(((float)gameInfo.OffsetList[offsetRow * 3 + 1] + cell.Index) / gameInfo.Column))//格子位置在最小、最大值范围内，并且九宫格有三行，该偏移量的位置和该行中间的偏移量对列数的商相等，说明没有换行
+        if (offset >= 0 && offset < GameInfo.Instance.MaxCell &&
+          offset / GameInfo.Instance.Column == (int)Math.Floor(((float)GameInfo.Instance.OffsetList[offsetRow * 3 + 1] + cell.Index) / GameInfo.Instance.Column))//格子位置在最小、最大值范围内，并且九宫格有三行，该偏移量的位置和该行中间的偏移量对列数的商相等，说明没有换行
         {
-          result.Add(gameInfo.CellList[offset]);
+          result.Add(GameInfo.Instance.CellList[offset]);
         }
         else
         {
@@ -249,7 +247,7 @@ namespace Minesweeper
       if (ClickedCell.IsBomb)
       {
         ClickedCell.Explode = true;
-        gameInfo.CurrFaceStatus = FaceStatus.Dead;
+        GameInfo.Instance.CurrFaceStatus = FaceStatus.Dead;
         GameOver(false);
         return;
       }
@@ -279,23 +277,23 @@ namespace Minesweeper
     private void CheckGameWin(Cell cell)
     {
       openCellList.Add(cell);
-      if (openCellList.Count == gameInfo.MaxCell - gameInfo.BombCount)
+      if (openCellList.Count == GameInfo.Instance.MaxCell - GameInfo.Instance.BombCount)
         GameOver(true);
     }
     private void GameOver(bool winOrlose)
     {
-      if (gameInfo.GameOver)
+      if (GameInfo.Instance.GameOver)
         return;
 
-      gameInfo.WinOrLose = winOrlose;
+      GameInfo.Instance.WinOrLose = winOrlose;
       if (winOrlose)
-        gameInfo.CurrFaceStatus = FaceStatus.Win;
+        GameInfo.Instance.CurrFaceStatus = FaceStatus.Win;
       else
-        gameInfo.CurrFaceStatus = FaceStatus.Dead;
+        GameInfo.Instance.CurrFaceStatus = FaceStatus.Dead;
 
-      gameInfo.GameOver = true;
+      GameInfo.Instance.GameOver = true;
       openCellList.Clear();
-      foreach (var cell in gameInfo.BombList)
+      foreach (var cell in GameInfo.Instance.BombList)
       {
         if (winOrlose)
         {
@@ -306,6 +304,28 @@ namespace Minesweeper
           if (cell.CellMark != CellMark.Flag)
             cell.IsOpened = true;
         }
+      }
+
+      if (!winOrlose)
+        return;
+
+      string gameScaleStr = "";
+      if (GameInfo.Instance.Row == 9 && GameInfo.Instance.Column == 9 && GameInfo.Instance.BombCount == 10)
+        gameScaleStr = "初级";
+      else if (GameInfo.Instance.Row == 16 && GameInfo.Instance.Column == 16 && GameInfo.Instance.BombCount == 40)
+        gameScaleStr = "中级";
+      else if (GameInfo.Instance.Row == 16 && GameInfo.Instance.Column == 30 && GameInfo.Instance.BombCount == 99)
+        gameScaleStr = "高级";
+      else
+        return;
+      //新纪录
+      if (!RankManager.RankDic.ContainsKey(gameScaleStr) ||
+        RankManager.RankDic[gameScaleStr].Duration > GameInfo.Instance.TimeCost)
+      {
+        var recoredWind = new NewRecordWindow();
+        recoredWind.DataContext = gameScaleStr;
+        recoredWind.ShowDialog();
+        RankManager.RankDic[gameScaleStr] = new ScoreRecord() { Duration = GameInfo.Instance.TimeCost };
       }
     }
 
@@ -321,7 +341,7 @@ namespace Minesweeper
       }
       if (rightButton == MouseButtonState.Released && e.ChangedButton == MouseButton.Left && listBox.SelectedItem != null)
       {
-        if (!gameInfo.Started)
+        if (!GameInfo.Instance.Started)
           StartGame();
 
         if (!seleCell.IsOpened)
@@ -349,15 +369,15 @@ namespace Minesweeper
         {
           case CellMark.None:
             cell.CellMark = CellMark.Flag;
-            gameInfo.FlagList.Add(cell);
+            GameInfo.Instance.FlagList.Add(cell);
             break;
           case CellMark.Flag:
-            if (gameInfo.UseMark)
+            if (GameInfo.Instance.UseMark)
               cell.CellMark = CellMark.QuestionMark;
             else
               cell.CellMark = CellMark.None;
 
-            gameInfo.FlagList.Remove(cell);
+            GameInfo.Instance.FlagList.Remove(cell);
             break;
           case CellMark.QuestionMark:
             cell.CellMark = CellMark.None;
@@ -383,18 +403,18 @@ namespace Minesweeper
     }
     private void CustomMenuItem_Click(object sender, RoutedEventArgs e)
     {
-      CustomGameWindow customGameWindow = new CustomGameWindow(this) { DataContext = gameInfo };
+      CustomGameWindow customGameWindow = new CustomGameWindow(this);
       customGameWindow.ShowDialog();
     }
     private void me_PreviewMouseDown(object sender, MouseButtonEventArgs e)
     {
-      if (e.LeftButton == MouseButtonState.Pressed && !gameInfo.GameOver)
-        gameInfo.CurrFaceStatus = FaceStatus.Clicked;
+      if (e.LeftButton == MouseButtonState.Pressed && !GameInfo.Instance.GameOver)
+        GameInfo.Instance.CurrFaceStatus = FaceStatus.Clicked;
     }
     private void me_PreviewMouseUp(object sender, MouseButtonEventArgs e)
     {
-      if (!gameInfo.GameOver)
-        gameInfo.CurrFaceStatus = FaceStatus.Normal;
+      if (!GameInfo.Instance.GameOver)
+        GameInfo.Instance.CurrFaceStatus = FaceStatus.Normal;
     }
 
     private void StandardDifficItem_Click(object sender, RoutedEventArgs e)
@@ -403,19 +423,19 @@ namespace Minesweeper
       switch (menuItem.Header)
       {
         case "初级":
-          gameInfo.Row = 9;
-          gameInfo.Column = 9;
-          gameInfo.BombCount = 10;
+          GameInfo.Instance.Row = 9;
+          GameInfo.Instance.Column = 9;
+          GameInfo.Instance.BombCount = 10;
           break;
         case "中级":
-          gameInfo.Row = 16;
-          gameInfo.Column = 16;
-          gameInfo.BombCount = 40;
+          GameInfo.Instance.Row = 16;
+          GameInfo.Instance.Column = 16;
+          GameInfo.Instance.BombCount = 40;
           break;
         case "高级":
-          gameInfo.Row = 16;
-          gameInfo.Column = 30;
-          gameInfo.BombCount = 99;
+          GameInfo.Instance.Row = 16;
+          GameInfo.Instance.Column = 30;
+          GameInfo.Instance.BombCount = 99;
           break;
       }
       InitGame();
@@ -429,7 +449,12 @@ namespace Minesweeper
 
     private void MarkMenuItem_Click(object sender, RoutedEventArgs e)
     {
-      gameInfo.UseMark = !gameInfo.UseMark;
+      GameInfo.Instance.UseMark = !GameInfo.Instance.UseMark;
+    }
+
+    private void RankMenuItem_Click(object sender, RoutedEventArgs e)
+    {
+      new RankingListWindow().ShowDialog();
     }
     #endregion
   }

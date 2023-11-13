@@ -13,6 +13,7 @@ namespace Minesweeper.Windows
     public CustomGameWindow(MainWindow mainWindow)
     {
       InitializeComponent();
+      DataContext = GameInfo.Instance;
       this.mainWindow = mainWindow;
     }
 
