@@ -456,9 +456,12 @@ namespace Minesweeper
 
     private void AllFlagMenuItem_Click(object sender, RoutedEventArgs e)
     {
+      if (GameInfo.Instance.GameOver)
+        return;
+      
       foreach (var item in GameInfo.Instance.CellList)
       {
-        if (item.CellMark != CellMark.Flag)
+        if (item.CellMark != CellMark.Flag && !item.IsOpened)
         {
           item.CellMark = CellMark.Flag;
         }
@@ -467,6 +470,9 @@ namespace Minesweeper
 
     private void CancelAllFlagMenuItem_Click(object sender, RoutedEventArgs e)
     {
+      if (GameInfo.Instance.GameOver)
+        return;
+
       for (int i = GameInfo.Instance.FlagList.Count - 1; i > -1; i--)
         GameInfo.Instance.FlagList[i].CellMark = CellMark.None;
     }

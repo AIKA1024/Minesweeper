@@ -34,6 +34,8 @@
         <MenuItem Header="全部插旗" Click="AllFlagMenuItem_Click"/>
         <MenuItem Header="全部去旗" Click="CancelAllFlagMenuItem_Click"/>
         <Separator/>
+        <MenuItem Header="存档(失去排名)"/>
+        <MenuItem Header="读档"/>
       </MenuItem>
       <MenuItem Header="帮助"/>
     </Menu>
