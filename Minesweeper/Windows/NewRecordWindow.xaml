@@ -14,7 +14,7 @@
     <Canvas Margin="20">
       <TextBlock Text="{Binding StringFormat={}已破{0}记录。&#x0a;请留尊姓大名}" Canvas.Left="22"/>
       <TextBox x:Name="playerNameTextBox" Text="匿名" Canvas.Top="65" Width="116"/>
-      <Button Content="确定" Padding="10 0" Canvas.Left="35" Canvas.Top="98" Click="Button_Click"/>
+      <Button Content="确定" Padding="10 0" Canvas.Left="35" Canvas.Top="98" Click="Button_Click" IsDefault="True"/>
     </Canvas>
   </Grid>
 </Window>
