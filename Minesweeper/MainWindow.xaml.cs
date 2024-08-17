@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Input;
 
 namespace Minesweeper
@@ -45,21 +46,30 @@ namespace Minesweeper
       GameInfo.Instance.TimeCost = 0;
       ReCalculateOffset();
     }
+    private void Swap<T>(List<T> list, int index1, int index2)
+    {
+      var temp = list[index1];
+      list[index1] = list[index2];
+      list[index2] = temp;
+    }
     private void StartGame()
     {
       GameInfo.Instance.Started = true;
       GameInfo.Instance.GameOver = false;
       Cell SeleCell = (Cell)listBox.SelectedItem;
       GameInfo.Instance.BombList.Clear();
+      var tempCellList = new List<Cell>(GameInfo.Instance.CellList);//用于快速计算布雷
+      int tail = GameInfo.Instance.CellList.Count - 1;
+      Swap(tempCellList, listBox.SelectedIndex, tail);//不让被点击的是雷，所以直接换到后面
       //布雷
       for (int i = 0; i < GameInfo.Instance.BombCount; i++)
       {
-        int bombIndex = Random.Shared.Next(0, GameInfo.Instance.MaxCell);
-        while (bombIndex == SeleCell.Index || GameInfo.Instance.CellList[bombIndex].IsBomb == true)
-          bombIndex = Random.Shared.Next(0, GameInfo.Instance.MaxCell);
-
-        GameInfo.Instance.CellList[bombIndex].IsBomb = true;
-        GameInfo.Instance.BombList.Add(GameInfo.Instance.CellList[bombIndex]);
+        tail--;
+        int bombIndex = Random.Shared.Next(0, tail);
+        var bombCell = tempCellList[bombIndex];
+        bombCell.IsBomb = true;
+        GameInfo.Instance.BombList.Add(bombCell);
+        Swap(tempCellList, bombIndex, tail);
       }
       //计算周围雷数
       foreach (var bombCell in GameInfo.Instance.BombList)
@@ -458,7 +468,7 @@ namespace Minesweeper
     {
       if (GameInfo.Instance.GameOver)
         return;
-      
+
       foreach (var item in GameInfo.Instance.CellList)
       {
         if (item.CellMark != CellMark.Flag && !item.IsOpened)

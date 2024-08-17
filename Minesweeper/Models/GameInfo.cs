@@ -16,10 +16,10 @@ namespace Minesweeper.Models
     private static GameInfo instance;
     public static GameInfo Instance
     {
-      get 
+      get
       {
         instance ??= new GameInfo();
-        return instance; 
+        return instance;
       }
     }
 
@@ -59,6 +59,8 @@ namespace Minesweeper.Models
       {
         if (value < 10)
           bombCount = 10;
+        else if (value >= row * column)
+          bombCount = row * column - 1;
         else
           bombCount = value;
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(BombCount)));
@@ -78,20 +80,20 @@ namespace Minesweeper.Models
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TimeCost)));
       }
     }
-    public int MaxCell 
+    public int MaxCell
     {
       get => Row * Column;
     }
-    
+
     private bool useMark = true;
 
     public bool UseMark
     {
       get { return useMark; }
-      set 
+      set
       {
-        useMark = value; 
-        PropertyChanged?.Invoke(this,new PropertyChangedEventArgs(nameof(UseMark)));
+        useMark = value;
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(UseMark)));
       }
     }
     private bool started;
@@ -149,8 +151,8 @@ namespace Minesweeper.Models
     public bool WinOrLose
     {
       get { return winOrLose; }
-      set 
-      { 
+      set
+      {
         winOrLose = value;
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(WinOrLose)));
       }
