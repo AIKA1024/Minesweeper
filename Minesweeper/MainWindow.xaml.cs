@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
 using System.Windows.Input;
 
 namespace Minesweeper
@@ -16,7 +15,7 @@ namespace Minesweeper
     MouseButtonState leftButton = MouseButtonState.Released;
     MouseButtonState rightButton = MouseButtonState.Released;
     readonly List<Cell?> lastPressList = new List<Cell?>();
-    readonly List<Cell> openCellList = new List<Cell>(10);
+    readonly List<Cell> openCellList = new List<Cell>(100);
     public MainWindow()
     {
       InitializeComponent();
@@ -32,13 +31,14 @@ namespace Minesweeper
       GameInfo.Instance.CurrFaceStatus = FaceStatus.Normal;
       while (GameInfo.Instance.CellList.Count < GameInfo.Instance.MaxCell)
         GameInfo.Instance.CellList.Add(CellPool.GetCell(GameInfo.Instance.CellList.Count));
-      for (int i = GameInfo.Instance.MaxCell; GameInfo.Instance.MaxCell < GameInfo.Instance.CellList.Count; i = GameInfo.Instance.CellList.Count - GameInfo.Instance.MaxCell)
+      while (GameInfo.Instance.MaxCell < GameInfo.Instance.CellList.Count)
       {
-        CellPool.ReturnCell(GameInfo.Instance.CellList[GameInfo.Instance.CellList.Count - i]);
-        GameInfo.Instance.CellList.RemoveAt(GameInfo.Instance.CellList.Count - i);
+        CellPool.ReturnCell(GameInfo.Instance.CellList[GameInfo.Instance.CellList.Count - 1]);
+        GameInfo.Instance.CellList.RemoveAt(GameInfo.Instance.CellList.Count - 1);
       }
-      foreach (var cell in GameInfo.Instance.CellList)
-        cell.Init();
+      if (GameInfo.Instance.Started||GameInfo.Instance.GameOver)
+        foreach (var cell in GameInfo.Instance.CellList)
+          cell.Init();
       GameInfo.Instance.Started = false;
       GameInfo.Instance.GameOver = false;
       openCellList.Clear();
@@ -70,19 +70,12 @@ namespace Minesweeper
         bombCell.IsBomb = true;
         GameInfo.Instance.BombList.Add(bombCell);
         Swap(tempCellList, bombIndex, tail);
-      }
-      //计算周围雷数
-      foreach (var bombCell in GameInfo.Instance.BombList)
-      {
+
         foreach (var cell in GetAroundValidCell(bombCell))
         {
-          if (cell.IsBomb == true || cell.AroundBombNum != 0)
-            continue;
-
-          foreach (var item in GetAroundValidCell(cell))
+          if (!cell.IsBomb)
           {
-            if (item.IsBomb == true)
-              cell.AroundBombNum++;
+            cell.AroundBombNum++;
           }
         }
       }
@@ -446,7 +439,7 @@ namespace Minesweeper
           break;
       }
       InitGame();
-      ReCalculateOffset();
+      //ReCalculateOffset();
     }
 
     private void ExitMenuItem_Click(object sender, RoutedEventArgs e)

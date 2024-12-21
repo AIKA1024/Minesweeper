@@ -9,7 +9,7 @@ namespace Minesweeper.Class
 {
   public static class CellPool
   {
-    private static List<Cell> cellPool = new List<Cell>();
+    private static List<Cell> cellPool = new List<Cell>(300);
     public static Cell GetCell(int index)
     {
       if (cellPool.Count != 0)
