@@ -36,9 +36,9 @@ namespace Minesweeper
         CellPool.ReturnCell(GameInfo.Instance.CellList[GameInfo.Instance.CellList.Count - 1]);
         GameInfo.Instance.CellList.RemoveAt(GameInfo.Instance.CellList.Count - 1);
       }
-      if (GameInfo.Instance.Started||GameInfo.Instance.GameOver)
-        foreach (var cell in GameInfo.Instance.CellList)
-          cell.Init();
+      //if (GameInfo.Instance.Started||GameInfo.Instance.GameOver)
+      //  foreach (var cell in GameInfo.Instance.CellList)
+      //    cell.Init();
       GameInfo.Instance.Started = false;
       GameInfo.Instance.GameOver = false;
       openCellList.Clear();

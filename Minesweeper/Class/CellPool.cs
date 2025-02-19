@@ -17,6 +17,7 @@ namespace Minesweeper.Class
         var temp = cellPool.Last();
         temp.Index = index;
         cellPool.RemoveAt(cellPool.Count-1);
+        temp.Init();
         return temp;
       }
       else
